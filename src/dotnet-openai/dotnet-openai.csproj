@@ -5,8 +5,8 @@
     <TargetFramework>net8.0</TargetFramework>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <PackageId>dotnet-openai</PackageId>
-    <Description>Normas argentinas en formato abierto</Description>
-    <ToolCommandName>openai</ToolCommandName>
+    <Description>An OpenAI CLI</Description>
+    <ToolCommandName>oai</ToolCommandName>
     <PackageTags>openai dotnet-tool</PackageTags>
   </PropertyGroup>
 

@@ -1,7 +1,7 @@
 ﻿```shell
-> openai --help
+> oai --help
 USAGE:
-    openai [OPTIONS] <COMMAND>
+    oai [OPTIONS] <COMMAND>
 
 OPTIONS:
     -h, --help    Prints help information
