@@ -1,0 +1,9 @@
+<Project>
+
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Devlooped.OpenAI</RootNamespace>
+    <UserSecretsId>94e34f89-74fd-421f-838e-ecc8e06bc1a3</UserSecretsId>
+  </PropertyGroup>
+
+</Project>

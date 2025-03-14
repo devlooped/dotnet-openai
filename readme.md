@@ -11,9 +11,10 @@
 ## Usage
 
 <!-- include src/dotnet-openai/help.md -->
-
 <!-- include src/dotnet-openai/auth.md -->
-
+<!-- include src/dotnet-openai/auth-login.md -->
+<!-- include src/dotnet-openai/auth-logout.md -->
+<!-- include src/dotnet-openai/auth-status.md -->
 
 <!-- #content -->
 <!-- include https://github.com/devlooped/sponsors/raw/main/footer.md -->
