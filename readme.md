@@ -10,7 +10,7 @@
 
 ## Usage
 
-<!-- include src/dotnet-openai/help.md -->
+<!-- include src/dotnet-openai/Docs/help.md -->
 ```shell
 > oai --help
 USAGE:
@@ -23,8 +23,8 @@ COMMANDS:
     auth     
 ```
 
-<!-- src/dotnet-openai/help.md -->
-<!-- include src/dotnet-openai/auth.md -->
+<!-- src/dotnet-openai/Docs/help.md -->
+<!-- include src/dotnet-openai/Docs/auth.md -->
 ```shell
 > oai auth --help
 USAGE:
@@ -55,8 +55,8 @@ COMMANDS:
     token              Print the auth token oai is configured to use            
 ```
 
-<!-- src/dotnet-openai/auth.md -->
-<!-- include src/dotnet-openai/auth-login.md -->
+<!-- src/dotnet-openai/Docs/auth.md -->
+<!-- include src/dotnet-openai/Docs/auth-login.md -->
 ```shell
 > oai auth login --help
 DESCRIPTION:
@@ -86,8 +86,8 @@ OPTIONS:
         --with-token    Read token from standard input
 ```
 
-<!-- src/dotnet-openai/auth-login.md -->
-<!-- include src/dotnet-openai/auth-logout.md -->
+<!-- src/dotnet-openai/Docs/auth-login.md -->
+<!-- include src/dotnet-openai/Docs/auth-logout.md -->
 ```shell
 > oai auth logout --help
 DESCRIPTION:
@@ -100,8 +100,8 @@ OPTIONS:
     -h, --help    Prints help information
 ```
 
-<!-- src/dotnet-openai/auth-logout.md -->
-<!-- include src/dotnet-openai/auth-status.md -->
+<!-- src/dotnet-openai/Docs/auth-logout.md -->
+<!-- include src/dotnet-openai/Docs/auth-status.md -->
 ```shell
 > oai auth status --help
 USAGE:
@@ -112,7 +112,8 @@ OPTIONS:
         --show-token    Display the auth token 
 ```
 
-<!-- src/dotnet-openai/auth-status.md -->
+<!-- src/dotnet-openai/Docs/auth-status.md -->
+<!-- src/dotnet-openai/Docs/file.md -->
 
 <!-- #content -->
 <!-- include https://github.com/devlooped/sponsors/raw/main/footer.md -->

@@ -9,8 +9,7 @@ Switch easily between keys by just specifying the project name after initial
 login with `--with-token`.
 
 Alternatively, oai will use the authentication token found in environment 
-variables 
-with the name `OPENAI_API_KEY`.
+variables with the name `OPENAI_API_KEY`.
 This method is most suitable for "headless" use such as in automation.
 
 For example, to use oai in GitHub Actions, add `OPENAI_API_KEY: ${{ 

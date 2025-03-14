@@ -16,8 +16,8 @@ COMMANDS:
                        name after initial login with `--with-token`.            
                                                                                 
                        Alternatively, oai will use the authentication token     
-                       found in environment variables                           
-                       with the name `OPENAI_API_KEY`.                          
+                       found in environment variables with the name             
+                       `OPENAI_API_KEY`.                                        
                        This method is most suitable for "headless" use such as  
                        in automation.                                           
                                                                                 
