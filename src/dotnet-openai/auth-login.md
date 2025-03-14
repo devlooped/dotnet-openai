@@ -1,5 +1,5 @@
 ﻿```shell
-> auth login --help
+> openai auth login --help
 DESCRIPTION:
 Authenticate to OpenAI. 
 

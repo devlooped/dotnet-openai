@@ -1,4 +1,4 @@
-﻿```shell
+﻿> openai --help
 USAGE:
     openai [OPTIONS] <COMMAND>
 
