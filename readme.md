@@ -16,12 +16,17 @@
 USAGE:
     oai [OPTIONS] <COMMAND>
 
+EXAMPLES:
+    oai file list --jq '.[].id'
+    oai file list --jq ".[] | { id: .id, name: .filename, purpose: .purpose }"
+    oai file list --jq ".[] | select(.sizeInBytes > 100000) | .id"
+
 OPTIONS:
     -h, --help    Prints help information
 
 COMMANDS:
     auth     
-```
+    file     
 
 <!-- src/dotnet-openai/Docs/help.md -->
 <!-- include src/dotnet-openai/Docs/auth.md -->
@@ -43,8 +48,8 @@ COMMANDS:
                        name after initial login with `--with-token`.            
                                                                                 
                        Alternatively, oai will use the authentication token     
-                       found in environment variables                           
-                       with the name `OPENAI_API_KEY`.                          
+                       found in environment variables with the name             
+                       `OPENAI_API_KEY`.                                        
                        This method is most suitable for "headless" use such as  
                        in automation.                                           
                                                                                 
@@ -68,8 +73,7 @@ Switch easily between keys by just specifying the project name after initial
 login with `--with-token`.
 
 Alternatively, oai will use the authentication token found in environment 
-variables 
-with the name `OPENAI_API_KEY`.
+variables with the name `OPENAI_API_KEY`.
 This method is most suitable for "headless" use such as in automation.
 
 For example, to use oai in GitHub Actions, add `OPENAI_API_KEY: ${{ 
