@@ -14,3 +14,4 @@ OPTIONS:
 COMMANDS:
     auth     
     file     
+```

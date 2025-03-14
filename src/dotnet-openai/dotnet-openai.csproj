@@ -65,7 +65,7 @@
     <Exec Condition="$(MSBuildLastExitCode) != '0'" Command="$(HelpCommand)" StdOutEncoding="UTF-8" EnvironmentVariables="NO_COLOR=true" />
     <Error Text="Failed to get help output." Condition="'$(MSBuildLastExitCode)' != '0'" />
 
-    <WriteLinesToFile Lines="```" Overwrite="false" Encoding="UTF-8" File="help.md" />
+    <WriteLinesToFile Lines="```" Overwrite="false" Encoding="UTF-8" File="Docs/help.md" />
   </Target>
 
   <Target Name="RenderCommandHelp" AfterTargets="Build" Inputs="@(CommandHelp)" Outputs="|%(CommandHelp.Identity)|" Condition="$(DesignTimeBuild) != 'true' and '$(OS)' == 'Windows_NT'">

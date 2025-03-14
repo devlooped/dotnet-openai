@@ -117,7 +117,7 @@ OPTIONS:
 ```
 
 <!-- src/dotnet-openai/Docs/auth-status.md -->
-<!-- src/dotnet-openai/Docs/file.md -->
+<!-- include src/dotnet-openai/Docs/file.md -->
 
 <!-- #content -->
 <!-- include https://github.com/devlooped/sponsors/raw/main/footer.md -->
