@@ -12,9 +12,9 @@
 
 <!-- include src/dotnet-openai/help.md -->
 ```shell
-> openai --help
+> oai --help
 USAGE:
-    openai [OPTIONS] <COMMAND>
+    oai [OPTIONS] <COMMAND>
 
 OPTIONS:
     -h, --help    Prints help information
@@ -26,9 +26,9 @@ COMMANDS:
 <!-- src/dotnet-openai/help.md -->
 <!-- include src/dotnet-openai/auth.md -->
 ```shell
-> openai auth --help
+> oai auth --help
 USAGE:
-    openai auth [OPTIONS] <COMMAND>
+    oai auth [OPTIONS] <COMMAND>
 
 OPTIONS:
     -h, --help    Prints help information
@@ -42,23 +42,23 @@ COMMANDS:
                        Switch easily between keys by just specifying the project
                        name after initial login with `--with-token`.            
                                                                                 
-                       Alternatively, openai will use the authentication token  
+                       Alternatively, oai will use the authentication token     
                        found in environment variables                           
                        with the name `OPENAI_API_KEY`.                          
                        This method is most suitable for "headless" use such as  
                        in automation.                                           
                                                                                 
-                       For example, to use openai in GitHub Actions, add        
+                       For example, to use oai in GitHub Actions, add           
                        `OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}` to "env" 
     logout             Log out of api.openai.com                                
     status                                                                      
-    token              Print the auth token openai is configured to use         
+    token              Print the auth token oai is configured to use            
 ```
 
 <!-- src/dotnet-openai/auth.md -->
 <!-- include src/dotnet-openai/auth-login.md -->
 ```shell
-> openai auth login --help
+> oai auth login --help
 DESCRIPTION:
 Authenticate to OpenAI. 
 
@@ -67,16 +67,16 @@ Supports API key autentication using the Git Credential Manager for storage.
 Switch easily between keys by just specifying the project name after initial 
 login with `--with-token`.
 
-Alternatively, openai will use the authentication token found in environment 
+Alternatively, oai will use the authentication token found in environment 
 variables 
 with the name `OPENAI_API_KEY`.
 This method is most suitable for "headless" use such as in automation.
 
-For example, to use openai in GitHub Actions, add `OPENAI_API_KEY: ${{ 
+For example, to use oai in GitHub Actions, add `OPENAI_API_KEY: ${{ 
 secrets.OPENAI_API_KEY }}` to "env".
 
 USAGE:
-    openai auth login <project> [OPTIONS]
+    oai auth login <project> [OPTIONS]
 
 ARGUMENTS:
     <project>    OpenAI project the API key belongs to
@@ -89,12 +89,12 @@ OPTIONS:
 <!-- src/dotnet-openai/auth-login.md -->
 <!-- include src/dotnet-openai/auth-logout.md -->
 ```shell
-> openai auth logout --help
+> oai auth logout --help
 DESCRIPTION:
 Log out of api.openai.com
 
 USAGE:
-    openai auth logout [OPTIONS]
+    oai auth logout [OPTIONS]
 
 OPTIONS:
     -h, --help    Prints help information
@@ -103,9 +103,9 @@ OPTIONS:
 <!-- src/dotnet-openai/auth-logout.md -->
 <!-- include src/dotnet-openai/auth-status.md -->
 ```shell
-> openai auth status --help
+> oai auth status --help
 USAGE:
-    openai auth status [OPTIONS]
+    oai auth status [OPTIONS]
 
 OPTIONS:
     -h, --help          Prints help information
