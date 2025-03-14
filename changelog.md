@@ -1,5 +1,18 @@
 # Changelog
 
+## [v0.2.0](https://github.com/devlooped/dotnet-openai/tree/v0.2.0) (2025-03-14)
+
+[Full Changelog](https://github.com/devlooped/dotnet-openai/compare/v0.1.0...v0.2.0)
+
+:sparkles: Implemented enhancements:
+
+- Add file view command, make colors default [\#14](https://github.com/devlooped/dotnet-openai/pull/14) (@kzu)
+- Add support for file list command [\#12](https://github.com/devlooped/dotnet-openai/pull/12) (@kzu)
+
+:bug: Fixed bugs:
+
+- Add missing build date and ref for release tag [\#11](https://github.com/devlooped/dotnet-openai/pull/11) (@kzu)
+
 ## [v0.1.0](https://github.com/devlooped/dotnet-openai/tree/v0.1.0) (2025-03-14)
 
 [Full Changelog](https://github.com/devlooped/dotnet-openai/compare/feb6a49b66f6169413fefc607bb70555c38e4caa...v0.1.0)
