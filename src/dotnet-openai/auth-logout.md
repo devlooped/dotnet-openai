@@ -1,4 +1,5 @@
 ﻿```shell
+> auth logout --help
 DESCRIPTION:
 Log out of api.openai.com
 

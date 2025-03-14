@@ -1,4 +1,5 @@
 ﻿```shell
+> auth status --help
 USAGE:
     openai auth status [OPTIONS]
 

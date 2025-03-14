@@ -69,6 +69,7 @@
     </PropertyGroup>
 
     <WriteLinesToFile Lines="```shell" Overwrite="true" Encoding="UTF-8" File="$(HelpFile)" />
+    <WriteLinesToFile Lines="&gt; $(CommandHelp) --help" Overwrite="false" Encoding="UTF-8" File="$(HelpFile)" />
 
     <Exec Command="$(HelpCommand) &gt;&gt; $(HelpFile)" StdOutEncoding="UTF-8" EnvironmentVariables="NO_COLOR=true" ContinueOnError="true">
       <Output TaskParameter="ExitCode" PropertyName="MSBuildLastExitCode" />
