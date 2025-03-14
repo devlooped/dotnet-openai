@@ -17,6 +17,7 @@ static class FileAppExtensions
                     .WithExample("file list --jq '.[].id'")
                     .WithExample("file list --jq \".[] | { id: .id, name: .filename, purpose: .purpose }\"")
                     .WithExample("file list --jq \".[] | select(.sizeInBytes > 100000) | .id\"");
+                auth.AddCommand<ViewCommand>("view");
             });
         });
         return app;

@@ -15,4 +15,5 @@ COMMANDS:
     upload <FILE>    Upload a local file, specifying its purpose
     delete <ID>      Delete a file by its ID                    
     list             List files                                 
+    view <ID>        View a file by its ID                      
 ```

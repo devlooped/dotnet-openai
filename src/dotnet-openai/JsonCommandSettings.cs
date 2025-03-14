@@ -15,10 +15,10 @@ public class JsonCommandSettings : CommandSettings
     [CommandOption("--json")]
     public bool Json { get; set; }
 
-    [Description("Pretty-print the JSON to the console")]
+    [Description("Disable colors when rendering JSON to the console")]
     [DefaultValue(false)]
-    [CommandOption("--pretty")]
-    public bool PrettyPrint { get; set; }
+    [CommandOption("--monochrome")]
+    public bool Monochrome { get; set; }
 
     public override ValidationResult Validate()
     {
