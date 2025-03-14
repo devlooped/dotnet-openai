@@ -11,6 +11,7 @@
 ## Usage
 
 <!-- include src/dotnet-openai/help.md -->
+```shell
 > openai --help
 USAGE:
     openai [OPTIONS] <COMMAND>
