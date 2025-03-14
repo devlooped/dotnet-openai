@@ -38,6 +38,7 @@ COMMANDS:
 <!-- src/dotnet-openai/auth.md -->
 <!-- include src/dotnet-openai/auth-login.md -->
 ```shell
+> auth login --help
 DESCRIPTION:
 Authenticate to OpenAI. 
 
@@ -68,6 +69,7 @@ OPTIONS:
 <!-- src/dotnet-openai/auth-login.md -->
 <!-- include src/dotnet-openai/auth-logout.md -->
 ```shell
+> auth logout --help
 DESCRIPTION:
 Log out of api.openai.com
 
@@ -81,6 +83,7 @@ OPTIONS:
 <!-- src/dotnet-openai/auth-logout.md -->
 <!-- include src/dotnet-openai/auth-status.md -->
 ```shell
+> auth status --help
 USAGE:
     openai auth status [OPTIONS]
 
