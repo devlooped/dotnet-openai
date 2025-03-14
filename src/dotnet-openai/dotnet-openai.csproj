@@ -14,6 +14,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Devlooped.JQ" Version="1.7.1.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
@@ -25,6 +26,7 @@
     <PackageReference Include="NuGetizer" Version="1.2.4" PrivateAssets="all" />
     <PackageReference Include="OpenAI" Version="2.2.0-beta.3" />
     <PackageReference Include="Spectre.Console.Cli" Version="0.49.1" />
+    <PackageReference Include="Spectre.Console.Json" Version="0.49.1" />
     <PackageReference Include="ThisAssembly.Git" Version="2.0.12" PrivateAssets="all" />
     <PackageReference Include="ThisAssembly.Project" Version="2.0.12" PrivateAssets="all" />
     <PackageReference Include="ThisAssembly.AssemblyInfo" Version="2.0.12" PrivateAssets="all" />
@@ -44,6 +46,7 @@
     <CommandHelp Include="auth login" />
     <CommandHelp Include="auth logout" />
     <CommandHelp Include="auth status" />
+    <CommandHelp Include="file" />
   </ItemGroup>
 
   <Target Name="RenderHelp" AfterTargets="Build" Condition="$(DesignTimeBuild) != 'true' and '$(OS)' == 'Windows_NT'">
@@ -52,10 +55,10 @@
       <HelpCommand>"$(Cli)" --help --unattended</HelpCommand>
     </PropertyGroup>
 
-    <WriteLinesToFile Lines="```shell" Overwrite="true" Encoding="UTF-8" File="help.md" />
-    <WriteLinesToFile Lines="&gt; $(ToolCommandName) --help" Overwrite="false" Encoding="UTF-8" File="help.md" />
+    <WriteLinesToFile Lines="```shell" Overwrite="true" Encoding="UTF-8" File="Docs/help.md" />
+    <WriteLinesToFile Lines="&gt; $(ToolCommandName) --help" Overwrite="false" Encoding="UTF-8" File="Docs/help.md" />
 
-    <Exec Command="$(HelpCommand) &gt;&gt; help.md" StdOutEncoding="UTF-8" EnvironmentVariables="NO_COLOR=true" ContinueOnError="true">
+    <Exec Command="$(HelpCommand) &gt;&gt; Docs/help.md" StdOutEncoding="UTF-8" EnvironmentVariables="NO_COLOR=true" ContinueOnError="true">
       <Output TaskParameter="ExitCode" PropertyName="MSBuildLastExitCode" />
     </Exec>
     <!-- Run again if it failed, but without the output redirect, for troubleshooting via build logs -->
@@ -70,7 +73,7 @@
       <CommandHelp>%(CommandHelp.Identity)</CommandHelp>
       <Cli>$(TargetDir)$(TargetName).exe</Cli>
       <HelpCommand>"$(Cli)" $(CommandHelp) --help --unattended</HelpCommand>
-      <HelpFile>$(CommandHelp.Replace(' ', '-')).md</HelpFile>
+      <HelpFile>Docs/$(CommandHelp.Replace(' ', '-')).md</HelpFile>
     </PropertyGroup>
 
     <WriteLinesToFile Lines="```shell" Overwrite="true" Encoding="UTF-8" File="$(HelpFile)" />

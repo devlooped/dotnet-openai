@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using System.Net.Http.Headers;
-using GitCredentialManager;
+﻿using GitCredentialManager;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
@@ -10,6 +8,10 @@ namespace Devlooped.OpenAI;
 
 public static class App
 {
+    static readonly CancellationTokenSource shutdownCancellation = new();
+
+    static App() => Console.CancelKeyPress += (s, e) => shutdownCancellation.Cancel();
+
     public static CommandApp Create() => Create(out _);
 
     public static CommandApp Create(out IServiceProvider services)
@@ -26,6 +28,8 @@ public static class App
         collection.AddSingleton(config)
             .AddSingleton<IConfiguration>(_ => config)
             .AddSingleton(_ => CredentialManager.Create(ThisAssembly.Project.PackageId));
+
+        collection.AddSingleton(shutdownCancellation);
 
         collection.AddSingleton(services =>
         {
@@ -51,6 +55,7 @@ public static class App
         });
 
         app.UseAuth();
+        app.UseFiles();
 
         services = registrar.Services.BuildServiceProvider();
 

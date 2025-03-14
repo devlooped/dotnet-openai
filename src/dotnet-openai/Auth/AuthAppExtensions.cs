@@ -18,7 +18,6 @@ static class AuthAppExtensions
                 auth.AddCommand<TokenCommand>("token");
             });
         });
-
         return app;
     }
 }
