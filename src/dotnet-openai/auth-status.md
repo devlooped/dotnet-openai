@@ -1,7 +1,7 @@
 ﻿```shell
-> openai auth status --help
+> oai auth status --help
 USAGE:
-    openai auth status [OPTIONS]
+    oai auth status [OPTIONS]
 
 OPTIONS:
     -h, --help          Prints help information
