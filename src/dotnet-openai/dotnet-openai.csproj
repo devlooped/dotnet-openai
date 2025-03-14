@@ -3,8 +3,6 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
-    <RootNamespace>Devlooped</RootNamespace>
-    <ImplicitUsings>enable</ImplicitUsings>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <PackageId>dotnet-openai</PackageId>
     <Description>Normas argentinas en formato abierto</Description>
@@ -13,11 +11,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="8.0.0" />
+    <PackageReference Include="Devlooped.CredentialManager" Version="2.6.1" />
     <PackageReference Include="NuGet.Protocol" Version="6.13.2" />
     <PackageReference Include="NuGetizer" Version="1.2.4" PrivateAssets="all" />
+    <PackageReference Include="OpenAI" Version="2.2.0-beta.3" />
     <PackageReference Include="Spectre.Console.Cli" Version="0.49.1" />
     <PackageReference Include="ThisAssembly.Git" Version="2.0.12" PrivateAssets="all" />
     <PackageReference Include="ThisAssembly.Project" Version="2.0.12" PrivateAssets="all" />
+    <PackageReference Include="ThisAssembly.AssemblyInfo" Version="2.0.12" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,5 +35,49 @@
     <ProjectProperty Include="PackageVersion" />
     <ProjectProperty Include="SLEET_FEED_URL" />
   </ItemGroup>
+
+  <ItemGroup>
+    <CommandHelp Include="auth login" />
+    <CommandHelp Include="auth logout" />
+    <CommandHelp Include="auth status" />
+  </ItemGroup>
+
+  <Target Name="RenderHelp" AfterTargets="Build" Condition="$(DesignTimeBuild) != 'true' and '$(OS)' == 'Windows_NT'">
+    <PropertyGroup>
+      <Cli>$(TargetDir)$(TargetName).exe</Cli>
+      <HelpCommand>"$(Cli)" --help --unattended</HelpCommand>
+    </PropertyGroup>
+
+    <WriteLinesToFile Lines="```shell" Overwrite="true" Encoding="UTF-8" File="help.md" />
+
+    <Exec Command="$(HelpCommand) &gt;&gt; help.md" StdOutEncoding="UTF-8" EnvironmentVariables="NO_COLOR=true" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="MSBuildLastExitCode" />
+    </Exec>
+    <!-- Run again if it failed, but without the output redirect, for troubleshooting via build logs -->
+    <Exec Condition="$(MSBuildLastExitCode) != '0'" Command="$(HelpCommand)" StdOutEncoding="UTF-8" EnvironmentVariables="NO_COLOR=true" />
+    <Error Text="Failed to get help output." Condition="'$(MSBuildLastExitCode)' != '0'" />
+
+    <WriteLinesToFile Lines="```" Overwrite="false" Encoding="UTF-8" File="help.md" />
+  </Target>
+
+  <Target Name="RenderCommandHelp" AfterTargets="Build" Inputs="@(CommandHelp)" Outputs="|%(CommandHelp.Identity)|" Condition="$(DesignTimeBuild) != 'true' and '$(OS)' == 'Windows_NT'">
+    <PropertyGroup>
+      <CommandHelp>%(CommandHelp.Identity)</CommandHelp>
+      <Cli>$(TargetDir)$(TargetName).exe</Cli>
+      <HelpCommand>"$(Cli)" $(CommandHelp) --help --unattended</HelpCommand>
+      <HelpFile>$(CommandHelp.Replace(' ', '-')).md</HelpFile>
+    </PropertyGroup>
+
+    <WriteLinesToFile Lines="```shell" Overwrite="true" Encoding="UTF-8" File="$(HelpFile)" />
+
+    <Exec Command="$(HelpCommand) &gt;&gt; $(HelpFile)" StdOutEncoding="UTF-8" EnvironmentVariables="NO_COLOR=true" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="MSBuildLastExitCode" />
+    </Exec>
+    <!-- Run again if it failed, but without the output redirect, for troubleshooting via build logs -->
+    <Exec Condition="$(MSBuildLastExitCode) != '0'" Command="$(HelpCommand)" StdOutEncoding="UTF-8" EnvironmentVariables="NO_COLOR=true" />
+    <Error Text="Failed to get help output." Condition="'$(MSBuildLastExitCode)' != '0'" />
+
+    <WriteLinesToFile Lines="```" Overwrite="false" Encoding="UTF-8" File="$(HelpFile)" />
+  </Target>
 
 </Project>
