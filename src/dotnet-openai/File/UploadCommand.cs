@@ -15,7 +15,7 @@ class UploadCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
 
         var response = await oai.GetOpenAIFileClient().UploadFileAsync(
             file, Path.GetFileName(settings.File),
-            new global::OpenAI.Files.FileUploadPurpose(settings.Purpose));
+            new FileUploadPurpose(settings.Purpose));
 
         if (settings.Json)
         {

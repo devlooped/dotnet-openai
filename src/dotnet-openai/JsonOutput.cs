@@ -25,39 +25,33 @@ static class JsonOutput
     };
 
     public static int RenderJson<T>(this IAnsiConsole console, T value, JsonCommandSettings settings, CancellationToken cancellation)
-        => RenderJson(console, value, settings.JQ, settings.PrettyPrint, cancellation);
+        => RenderJson(console, value, settings.JQ, settings.Monochrome, cancellation);
 
-    public static int RenderJson<T>(this IAnsiConsole console, T value, FlagValue<string> jq, bool pretty = false, CancellationToken cancellation = default)
-        => RenderJson(console, value, jq.IsSet ? jq.Value : default, pretty, cancellation);
+    public static int RenderJson<T>(this IAnsiConsole console, T value, FlagValue<string> jq, bool monochrome = false, CancellationToken cancellation = default)
+        => RenderJson(console, value, jq.IsSet ? jq.Value : default, monochrome, cancellation);
 
-    public static int RenderJson<T>(this IAnsiConsole console, T value, string? jq = default, bool pretty = false, CancellationToken cancellation = default)
+    public static int RenderJson<T>(this IAnsiConsole console, T value, string? jq = default, bool monochrome = false, CancellationToken cancellation = default)
     {
         var json = JsonSerializer.Serialize(value, options);
         if (string.IsNullOrWhiteSpace(jq))
         {
-            if (pretty)
-                console.Write(new JsonText(json));
-            else
-                console.WriteLine(json);
+            WriteJson(console, monochrome, json);
             return 0;
         }
-        return RenderJson(console, json, jq, pretty, cancellation);
+        return RenderJson(console, json, jq, monochrome, cancellation);
     }
 
-    public static int RenderJson(this IAnsiConsole console, string json, FlagValue<string> jq, bool pretty = false, CancellationToken cancellation = default)
+    public static int RenderJson(this IAnsiConsole console, string json, FlagValue<string> jq, bool monochrome = false, CancellationToken cancellation = default)
     {
         if (!jq.IsSet || string.IsNullOrWhiteSpace(jq.Value))
         {
-            if (pretty)
-                console.Write(new JsonText(json));
-            else
-                console.WriteLine(json);
+            WriteJson(console, monochrome, json);
             return 0;
         }
-        return RenderJson(console, json, jq.Value, pretty, cancellation);
+        return RenderJson(console, json, jq.Value, monochrome, cancellation);
     }
 
-    public static int RenderJson(this IAnsiConsole console, string json, string jq, bool pretty = false, CancellationToken cancellation = default)
+    public static int RenderJson(this IAnsiConsole console, string json, string jq, bool monochrome = false, CancellationToken cancellation = default)
     {
         var info = new ProcessStartInfo(JQ.Path)
         {
@@ -129,23 +123,28 @@ static class JsonOutput
 
         if (!string.IsNullOrEmpty(output))
         {
-            if (pretty)
-            {
-                try
-                {
-                    console.Write(new JsonText(output));
-                }
-                catch
-                {
-                    console.WriteLine(output);
-                }
-            }
-            else
-            {
-                console.WriteLine(output);
-            }
+            WriteJson(console, monochrome, output);
         }
 
         return process.ExitCode;
+    }
+
+    static void WriteJson(IAnsiConsole console, bool monochrome, string json)
+    {
+        if (monochrome)
+        {
+            console.WriteLine(json);
+        }
+        else
+        {
+            try
+            {
+                console.Write(new JsonText(json));
+            }
+            catch
+            {
+                console.WriteLine(json);
+            }
+        }
     }
 }
