@@ -30,6 +30,15 @@ COMMANDS:
 ```
 
 <!-- src/dotnet-openai/Docs/help.md -->
+
+## Authentication
+
+Authentication is managed for you by the CLI, using the [Git Credential Manager](https://github.com/git-ecosystem/git-credential-manager) 
+as the cross-platform secure storage for your API key(s). You can login multiple project/key 
+combination and then just change the active one without ever re-entering the keys.
+
+See [authentication](https://platform.openai.com/docs/api-reference/authentication) for more details.
+
 <!-- include src/dotnet-openai/Docs/auth.md -->
 ```shell
 > oai auth --help
@@ -118,6 +127,11 @@ OPTIONS:
 ```
 
 <!-- src/dotnet-openai/Docs/auth-status.md -->
+
+## Files
+
+Implements the [Files API](https://platform.openai.com/docs/api-reference/files).
+
 <!-- include src/dotnet-openai/Docs/file.md -->
 ```shell
 > oai file --help
@@ -140,6 +154,11 @@ COMMANDS:
 ```
 
 <!-- src/dotnet-openai/Docs/file.md -->
+
+## Vector Stores
+
+Implements the [Vector Stores API](https://platform.openai.com/docs/api-reference/vector-stores).
+
 <!-- include src/dotnet-openai/Docs/vector.md -->
 <!-- include src/dotnet-openai/Docs/vector-file.md -->
 

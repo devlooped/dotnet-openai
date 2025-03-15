@@ -1,11 +1,12 @@
 ﻿```shell
-> oai vector --help
+> openai vector --help
 USAGE:
-    oai vector [OPTIONS] <COMMAND>
+    openai vector [OPTIONS] <COMMAND>
 
 EXAMPLES:
-    oai vector create --name my-store --meta 'key1=value1' --meta 'key2=value'
-    oai vector create --name with-files --file asdf123 --file qwer456
+    openai vector create --name my-store --meta 'key1=value1' --meta 
+'key2=value'
+    openai vector create --name with-files --file asdf123 --file qwer456
 
 OPTIONS:
     -h, --help    Prints help information

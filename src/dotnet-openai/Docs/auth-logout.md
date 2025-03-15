@@ -1,10 +1,10 @@
 ﻿```shell
-> oai auth logout --help
+> openai auth logout --help
 DESCRIPTION:
 Log out of api.openai.com
 
 USAGE:
-    oai auth logout [OPTIONS]
+    openai auth logout [OPTIONS]
 
 OPTIONS:
     -h, --help    Prints help information

@@ -1,10 +1,10 @@
 ﻿```shell
-> oai vector file --help
+> openai vector file --help
 DESCRIPTION:
 Vector store files operations
 
 USAGE:
-    oai vector file [OPTIONS] <COMMAND>
+    openai vector file [OPTIONS] <COMMAND>
 
 OPTIONS:
     -h, --help    Prints help information
