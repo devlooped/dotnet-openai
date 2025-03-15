@@ -32,6 +32,7 @@ COMMANDS:
     auth       
     file       
     vector     
+    model      
 ```
 
 <!-- src/dotnet-openai/Docs/help.md -->
@@ -215,6 +216,20 @@ COMMANDS:
 List and view available models via the [models API](https://platform.openai.com/docs/api-reference/models/list);
 
 <!-- include src/dotnet-openai/Docs/model.md -->
+```shell
+> openai model --help
+USAGE:
+    openai model [OPTIONS] <COMMAND>
+
+OPTIONS:
+    -h, --help    Prints help information
+
+COMMANDS:
+    list         List available models
+    view <ID>    View model details   
+```
+
+<!-- src/dotnet-openai/Docs/model.md -->
 
 <!-- #content -->
 <!-- include https://github.com/devlooped/sponsors/raw/main/footer.md -->
