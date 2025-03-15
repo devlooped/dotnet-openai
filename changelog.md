@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.3.0](https://github.com/devlooped/dotnet-openai/tree/v0.3.0) (2025-03-15)
+
+[Full Changelog](https://github.com/devlooped/dotnet-openai/compare/v0.2.2...v0.3.0)
+
+:sparkles: Implemented enhancements:
+
+- Rename back to openai, improve docs [\#18](https://github.com/devlooped/dotnet-openai/pull/18) (@kzu)
+
 ## [v0.2.2](https://github.com/devlooped/dotnet-openai/tree/v0.2.2) (2025-03-15)
 
 [Full Changelog](https://github.com/devlooped/dotnet-openai/compare/v0.2.1...v0.2.2)
