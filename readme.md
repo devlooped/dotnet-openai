@@ -12,21 +12,26 @@
 
 <!-- include src/dotnet-openai/Docs/help.md -->
 ```shell
-> oai --help
+> openai --help
 USAGE:
-    oai [OPTIONS] <COMMAND>
+    openai [OPTIONS] <COMMAND>
 
 EXAMPLES:
-    oai file list --jq '.[].id'
-    oai file list --jq ".[] | { id: .id, name: .filename, purpose: .purpose }"
-    oai file list --jq ".[] | select(.sizeInBytes > 100000) | .id"
+    openai file list --jq '.[].id'
+    openai file list --jq ".[] | { id: .id, name: .filename, purpose: .purpose 
+}"
+    openai file list --jq ".[] | select(.sizeInBytes > 100000) | .id"
+    openai vector create --name my-store --meta 'key1=value1' --meta 
+'key2=value'
+    openai vector create --name with-files --file asdf123 --file qwer456
 
 OPTIONS:
     -h, --help    Prints help information
 
 COMMANDS:
-    auth     
-    file     
+    auth       
+    file       
+    vector     
 ```
 
 <!-- src/dotnet-openai/Docs/help.md -->
@@ -41,9 +46,9 @@ See [authentication](https://platform.openai.com/docs/api-reference/authenticati
 
 <!-- include src/dotnet-openai/Docs/auth.md -->
 ```shell
-> oai auth --help
+> openai auth --help
 USAGE:
-    oai auth [OPTIONS] <COMMAND>
+    openai auth [OPTIONS] <COMMAND>
 
 OPTIONS:
     -h, --help    Prints help information
@@ -57,23 +62,23 @@ COMMANDS:
                        Switch easily between keys by just specifying the project
                        name after initial login with `--with-token`.            
                                                                                 
-                       Alternatively, oai will use the authentication token     
+                       Alternatively, openai will use the authentication token  
                        found in environment variables with the name             
                        `OPENAI_API_KEY`.                                        
                        This method is most suitable for "headless" use such as  
                        in automation.                                           
                                                                                 
-                       For example, to use oai in GitHub Actions, add           
+                       For example, to use openai in GitHub Actions, add        
                        `OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}` to "env" 
     logout             Log out of api.openai.com                                
     status                                                                      
-    token              Print the auth token oai is configured to use            
+    token              Print the auth token openai is configured to use         
 ```
 
 <!-- src/dotnet-openai/Docs/auth.md -->
 <!-- include src/dotnet-openai/Docs/auth-login.md -->
 ```shell
-> oai auth login --help
+> openai auth login --help
 DESCRIPTION:
 Authenticate to OpenAI. 
 
@@ -82,15 +87,15 @@ Supports API key autentication using the Git Credential Manager for storage.
 Switch easily between keys by just specifying the project name after initial 
 login with `--with-token`.
 
-Alternatively, oai will use the authentication token found in environment 
+Alternatively, openai will use the authentication token found in environment 
 variables with the name `OPENAI_API_KEY`.
 This method is most suitable for "headless" use such as in automation.
 
-For example, to use oai in GitHub Actions, add `OPENAI_API_KEY: ${{ 
+For example, to use openai in GitHub Actions, add `OPENAI_API_KEY: ${{ 
 secrets.OPENAI_API_KEY }}` to "env".
 
 USAGE:
-    oai auth login <project> [OPTIONS]
+    openai auth login <project> [OPTIONS]
 
 ARGUMENTS:
     <project>    OpenAI project the API key belongs to
@@ -103,12 +108,12 @@ OPTIONS:
 <!-- src/dotnet-openai/Docs/auth-login.md -->
 <!-- include src/dotnet-openai/Docs/auth-logout.md -->
 ```shell
-> oai auth logout --help
+> openai auth logout --help
 DESCRIPTION:
 Log out of api.openai.com
 
 USAGE:
-    oai auth logout [OPTIONS]
+    openai auth logout [OPTIONS]
 
 OPTIONS:
     -h, --help    Prints help information
@@ -117,9 +122,9 @@ OPTIONS:
 <!-- src/dotnet-openai/Docs/auth-logout.md -->
 <!-- include src/dotnet-openai/Docs/auth-status.md -->
 ```shell
-> oai auth status --help
+> openai auth status --help
 USAGE:
-    oai auth status [OPTIONS]
+    openai auth status [OPTIONS]
 
 OPTIONS:
     -h, --help          Prints help information
@@ -134,14 +139,15 @@ Implements the [Files API](https://platform.openai.com/docs/api-reference/files)
 
 <!-- include src/dotnet-openai/Docs/file.md -->
 ```shell
-> oai file --help
+> openai file --help
 USAGE:
-    oai file [OPTIONS] <COMMAND>
+    openai file [OPTIONS] <COMMAND>
 
 EXAMPLES:
-    oai file list --jq '.[].id'
-    oai file list --jq ".[] | { id: .id, name: .filename, purpose: .purpose }"
-    oai file list --jq ".[] | select(.sizeInBytes > 100000) | .id"
+    openai file list --jq '.[].id'
+    openai file list --jq ".[] | { id: .id, name: .filename, purpose: .purpose 
+}"
+    openai file list --jq ".[] | select(.sizeInBytes > 100000) | .id"
 
 OPTIONS:
     -h, --help    Prints help information
@@ -160,7 +166,49 @@ COMMANDS:
 Implements the [Vector Stores API](https://platform.openai.com/docs/api-reference/vector-stores).
 
 <!-- include src/dotnet-openai/Docs/vector.md -->
+```shell
+> openai vector --help
+USAGE:
+    openai vector [OPTIONS] <COMMAND>
+
+EXAMPLES:
+    openai vector create --name my-store --meta 'key1=value1' --meta 
+'key2=value'
+    openai vector create --name with-files --file asdf123 --file qwer456
+
+OPTIONS:
+    -h, --help    Prints help information
+
+COMMANDS:
+    create         Creates a vector store       
+    modify <ID>    Modify a vector store        
+    delete <ID>    Delete a vector store by ID  
+    list           List vector stores           
+    view <ID>      View a store by its ID       
+    file           Vector store files operations
+```
+
+<!-- src/dotnet-openai/Docs/vector.md -->
 <!-- include src/dotnet-openai/Docs/vector-file.md -->
+```shell
+> openai vector file --help
+DESCRIPTION:
+Vector store files operations
+
+USAGE:
+    openai vector file [OPTIONS] <COMMAND>
+
+OPTIONS:
+    -h, --help    Prints help information
+
+COMMANDS:
+    add <STORE_ID> <FILE_ID>       Add file to vector store               
+    delete <STORE_ID> <FILE_ID>    Remove file from vector store          
+    list <STORE_ID>                List files associated with vector store
+    view <STORE_ID> <FILE_ID>      View file association to a vector store
+```
+
+<!-- src/dotnet-openai/Docs/vector-file.md -->
 
 <!-- #content -->
 <!-- include https://github.com/devlooped/sponsors/raw/main/footer.md -->
