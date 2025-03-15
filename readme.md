@@ -210,6 +210,12 @@ COMMANDS:
 
 <!-- src/dotnet-openai/Docs/vector-file.md -->
 
+## Models
+
+List and view available models via the [models API](https://platform.openai.com/docs/api-reference/models/list);
+
+<!-- include src/dotnet-openai/Docs/model.md -->
+
 <!-- #content -->
 <!-- include https://github.com/devlooped/sponsors/raw/main/footer.md -->
 # Sponsors 

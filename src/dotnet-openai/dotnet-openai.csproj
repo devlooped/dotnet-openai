@@ -47,6 +47,7 @@
     <CommandHelp Include="auth logout" />
     <CommandHelp Include="auth status" />
     <CommandHelp Include="file" />
+    <CommandHelp Include="model" />
     <CommandHelp Include="vector" />
     <CommandHelp Include="vector file" />
   </ItemGroup>

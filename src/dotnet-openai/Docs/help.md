@@ -19,4 +19,5 @@ COMMANDS:
     auth       
     file       
     vector     
+    model      
 ```
