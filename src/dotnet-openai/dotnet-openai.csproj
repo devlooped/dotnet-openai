@@ -6,7 +6,7 @@
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <PackageId>dotnet-openai</PackageId>
     <Description>An OpenAI CLI</Description>
-    <ToolCommandName>oai</ToolCommandName>
+    <ToolCommandName>openai</ToolCommandName>
     <PackageTags>openai dotnet-tool</PackageTags>
 
     <BuildDate>$([System.DateTime]::Now.ToString("yyyy-MM-dd"))</BuildDate>

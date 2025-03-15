@@ -1,12 +1,13 @@
 ﻿```shell
-> oai file --help
+> openai file --help
 USAGE:
-    oai file [OPTIONS] <COMMAND>
+    openai file [OPTIONS] <COMMAND>
 
 EXAMPLES:
-    oai file list --jq '.[].id'
-    oai file list --jq ".[] | { id: .id, name: .filename, purpose: .purpose }"
-    oai file list --jq ".[] | select(.sizeInBytes > 100000) | .id"
+    openai file list --jq '.[].id'
+    openai file list --jq ".[] | { id: .id, name: .filename, purpose: .purpose 
+}"
+    openai file list --jq ".[] | select(.sizeInBytes > 100000) | .id"
 
 OPTIONS:
     -h, --help    Prints help information
