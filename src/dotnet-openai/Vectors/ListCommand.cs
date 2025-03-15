@@ -7,18 +7,18 @@ namespace Devlooped.OpenAI.Vectors;
 
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 [Description("List vector stores")]
-class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<JsonCommandSettings>
+class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<JsonCommandSettings>
 {
-    public override Task<int> ExecuteAsync(CommandContext context, JsonCommandSettings settings)
+    public override int Execute(CommandContext context, JsonCommandSettings settings)
     {
         var result = oai.GetVectorStoreClient().GetVectorStores();
         if (result is null)
         {
             console.MarkupLine($":cross_mark: Failed to list vector stores");
-            return Task.FromResult(-1);
+            return -1;
         }
 
-        return Task.FromResult(console.RenderJson(result, settings, cts.Token));
+        return console.RenderJson(result, settings, cts.Token);
 
         // TODO: provide table rendering for non-json output
         //console.Write(store.Id);
