@@ -1,5 +1,13 @@
 # Changelog
 
+## [v0.2.2](https://github.com/devlooped/dotnet-openai/tree/v0.2.2) (2025-03-15)
+
+[Full Changelog](https://github.com/devlooped/dotnet-openai/compare/v0.2.1...v0.2.2)
+
+:sparkles: Implemented enhancements:
+
+- Add vector store file operations [\#16](https://github.com/devlooped/dotnet-openai/pull/16) (@kzu)
+
 ## [v0.2.1](https://github.com/devlooped/dotnet-openai/tree/v0.2.1) (2025-03-14)
 
 [Full Changelog](https://github.com/devlooped/dotnet-openai/compare/v0.2.0...v0.2.1)
