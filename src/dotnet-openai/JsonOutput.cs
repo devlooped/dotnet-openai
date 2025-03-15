@@ -131,9 +131,10 @@ static class JsonOutput
 
     static void WriteJson(IAnsiConsole console, bool monochrome, string json)
     {
+        json = json.Trim();
         if (monochrome)
         {
-            console.WriteLine(json);
+            console.Write(json);
         }
         else
         {
@@ -143,7 +144,7 @@ static class JsonOutput
             }
             catch
             {
-                console.WriteLine(json);
+                console.Write(json);
             }
         }
     }

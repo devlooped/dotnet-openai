@@ -47,6 +47,8 @@
     <CommandHelp Include="auth logout" />
     <CommandHelp Include="auth status" />
     <CommandHelp Include="file" />
+    <CommandHelp Include="vector" />
+    <CommandHelp Include="vector file" />
   </ItemGroup>
 
   <Target Name="RenderHelp" AfterTargets="Build" Condition="$(DesignTimeBuild) != 'true' and '$(OS)' == 'Windows_NT'">

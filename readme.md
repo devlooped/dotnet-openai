@@ -140,6 +140,8 @@ COMMANDS:
 ```
 
 <!-- src/dotnet-openai/Docs/file.md -->
+<!-- include src/dotnet-openai/Docs/vector.md -->
+<!-- include src/dotnet-openai/Docs/vector-file.md -->
 
 <!-- #content -->
 <!-- include https://github.com/devlooped/sponsors/raw/main/footer.md -->

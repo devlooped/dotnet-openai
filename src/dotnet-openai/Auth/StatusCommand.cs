@@ -1,7 +1,5 @@
 ﻿using System.ClientModel;
 using System.ComponentModel;
-using System.Reflection;
-using System.Reflection.Metadata.Ecma335;
 using GitCredentialManager;
 using Microsoft.Extensions.Configuration;
 using OpenAI;
