@@ -9,15 +9,15 @@ static class FileAppExtensions
     {
         app.Configure(config =>
         {
-            config.AddBranch("file", auth =>
+            config.AddBranch("file", group =>
             {
-                auth.AddCommand<UploadCommand>("upload");
-                auth.AddCommand<DeleteCommand>("delete");
-                auth.AddCommand<ListCommand>("list")
+                group.AddCommand<UploadCommand>("upload");
+                group.AddCommand<DeleteCommand>("delete");
+                group.AddCommand<ListCommand>("list")
                     .WithExample("file list --jq '.[].id'")
                     .WithExample("file list --jq \".[] | { id: .id, name: .filename, purpose: .purpose }\"")
                     .WithExample("file list --jq \".[] | select(.sizeInBytes > 100000) | .id\"");
-                auth.AddCommand<ViewCommand>("view");
+                group.AddCommand<ViewCommand>("view");
             });
         });
         return app;

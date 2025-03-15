@@ -1,0 +1,27 @@
+﻿using System.ComponentModel;
+using OpenAI;
+using Spectre.Console;
+using Spectre.Console.Cli;
+
+namespace Devlooped.OpenAI.Vectors;
+
+#pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
+[Description("List vector stores")]
+class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<JsonCommandSettings>
+{
+    public override Task<int> ExecuteAsync(CommandContext context, JsonCommandSettings settings)
+    {
+        var result = oai.GetVectorStoreClient().GetVectorStores();
+        if (result is null)
+        {
+            console.MarkupLine($":cross_mark: Failed to list vector stores");
+            return Task.FromResult(-1);
+        }
+
+        return Task.FromResult(console.RenderJson(result, settings, cts.Token));
+
+        // TODO: provide table rendering for non-json output
+        //console.Write(store.Id);
+        //return 0;
+    }
+}

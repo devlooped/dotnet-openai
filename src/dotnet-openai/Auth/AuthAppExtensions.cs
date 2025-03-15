@@ -10,12 +10,12 @@ static class AuthAppExtensions
     {
         app.Configure(config =>
         {
-            config.AddBranch("auth", auth =>
+            config.AddBranch("auth", group =>
             {
-                auth.AddCommand<LoginCommand>("login");
-                auth.AddCommand<LogoutCommand>("logout");
-                auth.AddCommand<StatusCommand>("status");
-                auth.AddCommand<TokenCommand>("token");
+                group.AddCommand<LoginCommand>("login");
+                group.AddCommand<LogoutCommand>("logout");
+                group.AddCommand<StatusCommand>("status");
+                group.AddCommand<TokenCommand>("token");
             });
         });
         return app;

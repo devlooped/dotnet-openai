@@ -56,6 +56,7 @@ public static class App
 
         app.UseAuth();
         app.UseFiles();
+        app.UseVectors();
 
         services = registrar.Services.BuildServiceProvider();
 
