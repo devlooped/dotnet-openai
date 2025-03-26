@@ -24,6 +24,6 @@ COMMANDS:
                        For example, to use openai in GitHub Actions, add        
                        `OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}` to "env" 
     logout             Log out of api.openai.com                                
-    status                                                                      
+    status             Shows the current authentication status                  
     token              Print the auth token openai is configured to use         
 ```
