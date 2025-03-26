@@ -9,11 +9,11 @@ using Spectre.Console.Cli;
 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
     Console.InputEncoding = Console.OutputEncoding = Encoding.UTF8;
 
-args = ExpandResponseFiles(args).ToArray();
+args = [.. ExpandResponseFiles(args)];
 
 // Alias -? to -h for help
 if (args.Contains("-?"))
-    args = args.Select(x => x == "-?" ? "-h" : x).ToArray();
+    args = [.. args.Select(x => x == "-?" ? "-h" : x)];
 
 #if DEBUG
 if (args.Contains("--debug"))
