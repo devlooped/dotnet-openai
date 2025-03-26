@@ -8,6 +8,7 @@ using Spectre.Console.Cli;
 
 namespace Devlooped.OpenAI.Auth;
 
+[Description("Shows the current authentication status")]
 class StatusCommand(IAnsiConsole console, IConfiguration configuration, ICredentialStore store, OpenAIClient client) : AsyncCommand<StatusCommand.StatusSettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, StatusSettings settings)

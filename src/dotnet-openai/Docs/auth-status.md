@@ -1,5 +1,8 @@
 ﻿```shell
 > openai auth status --help
+DESCRIPTION:
+Shows the current authentication status
+
 USAGE:
     openai auth status [OPTIONS]
 
