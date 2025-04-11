@@ -1,5 +1,18 @@
 # Changelog
 
+## [v0.4.0](https://github.com/devlooped/dotnet-openai/tree/v0.4.0) (2025-04-11)
+
+[Full Changelog](https://github.com/devlooped/dotnet-openai/compare/v0.3.0...v0.4.0)
+
+:sparkles: Implemented enhancements:
+
+- Use more succint collection expression [\#24](https://github.com/devlooped/dotnet-openai/pull/24) (@kzu)
+- Add model API [\#19](https://github.com/devlooped/dotnet-openai/pull/19) (@kzu)
+
+:twisted_rightwards_arrows: Merged:
+
+- Add description for status command [\#25](https://github.com/devlooped/dotnet-openai/pull/25) (@kzu)
+
 ## [v0.3.0](https://github.com/devlooped/dotnet-openai/tree/v0.3.0) (2025-03-15)
 
 [Full Changelog](https://github.com/devlooped/dotnet-openai/compare/v0.2.2...v0.3.0)
