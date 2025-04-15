@@ -1,4 +1,7 @@
 ﻿using System.ComponentModel;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Text.Json.Serialization;
 using OpenAI;
 using OpenAI.VectorStores;
 using Spectre.Console;
@@ -10,10 +13,17 @@ namespace Devlooped.OpenAI.Vectors;
 [Description("List files associated with vector store")]
 class FileListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<FileListCommand.Settings>
 {
+    static readonly JsonSerializerOptions jsonOptions = new(JsonSerializerDefaults.Web)
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+    };
+
     public override int Execute(CommandContext context, Settings settings)
     {
-        var options = new VectorStoreFileAssociationCollectionOptions();
-        options.Filter = settings.Filter;
+        var options = new VectorStoreFileAssociationCollectionOptions
+        {
+            Filter = settings.Filter,
+        };
 
         var result = oai.GetVectorStoreClient().GetFileAssociations(settings.StoreId, options, cts.Token);
         if (result is null)
@@ -22,12 +32,20 @@ class FileListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenS
             return -1;
         }
 
-        return console.RenderJson(result, settings, cts.Token);
+        var payload = result
+            .GetRawPages()
+            .SelectMany(x => JsonSerializer.Deserialize<VectorStoreFileAssociationData>(
+                x.GetRawResponse().Content.ToString(), jsonOptions)!.Data)
+            .ToList();
+
+        return console.RenderJson(payload, settings, cts.Token);
 
         // TODO: provide table rendering for non-json output
         //console.Write(store.Id);
         //return 0;
     }
+
+    record VectorStoreFileAssociationData(List<JsonNode> Data);
 
     public class Settings : JsonCommandSettings
     {
