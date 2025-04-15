@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using OpenAI;
 using OpenAI.Files;
 using Spectre.Console;
@@ -43,10 +44,12 @@ class UploadCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
     {
         [Description("File to upload")]
         [CommandArgument(0, "<FILE>")]
+        [Required]
         public required string File { get; init; }
 
         [DisplayValueDescription<UploadPurpose>("Purpose of the file")]
         [CommandOption("-p|--purpose <PURPOSE>")]
+        [Required]
         public required string Purpose { get; set; }
     }
 }
