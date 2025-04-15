@@ -13,7 +13,7 @@ variables with the name `OPENAI_API_KEY`.
 This method is most suitable for "headless" use such as in automation.
 
 For example, to use openai in GitHub Actions, add `OPENAI_API_KEY: ${{ 
-secrets.OPENAI_API_KEY }}` to "env".
+secrets.OPENAI_API_KEY }}` to "env"
 
 USAGE:
     openai auth login <project> [OPTIONS]
