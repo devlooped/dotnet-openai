@@ -48,8 +48,8 @@ class UploadCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
         public required string File { get; init; }
 
         [DisplayValueDescription<UploadPurpose>("Purpose of the file")]
+        [DefaultValue("assistants")]
         [CommandOption("-p|--purpose <PURPOSE>")]
-        [Required]
-        public required string Purpose { get; set; }
+        public string Purpose { get; set; } = "assistants";
     }
 }
