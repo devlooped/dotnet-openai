@@ -40,9 +40,7 @@ app.Configure(config => config.SetApplicationName(ThisAssembly.Project.ToolComma
 if (args.Contains("--version"))
 {
     app.ShowVersion();
-#if DEBUG
     await app.ShowUpdatesAsync(args);
-#endif
     return 0;
 }
 
