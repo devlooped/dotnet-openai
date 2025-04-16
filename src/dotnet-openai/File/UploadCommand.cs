@@ -20,7 +20,7 @@ class UploadCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
 
         if (settings.Json)
         {
-            return console.RenderJson(response.Value, settings, cts.Token);
+            return console.RenderJson(response.GetRawResponse(), settings, cts.Token);
         }
         else
         {

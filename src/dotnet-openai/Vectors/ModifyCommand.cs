@@ -33,12 +33,8 @@ class ModifyCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
             return -1;
         }
 
-        ////if (settings.Json)
-        return console.RenderJson(result.Value, settings, cts.Token);
-
-        // TODO: Render the result as a table
-        //console.Write(result.Value..Id);
-        //return 0;
+        // TODO: add non-JSON output?
+        return console.RenderJson(result.GetRawResponse(), settings, cts.Token);
     }
 
     public class ModifySettings : JsonCommandSettings

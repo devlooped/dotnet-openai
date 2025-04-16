@@ -13,6 +13,6 @@ class FileViewCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenS
     {
         var response = oai.GetVectorStoreClient().GetFileAssociation(settings.StoreId, settings.FileId, cts.Token);
 
-        return console.RenderJson(response.Value, settings, cts.Token);
+        return console.RenderJson(response.GetRawResponse(), settings, cts.Token);
     }
 }

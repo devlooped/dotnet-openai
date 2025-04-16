@@ -13,7 +13,8 @@ class ViewCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSourc
     {
         var response = oai.GetVectorStoreClient().GetVectorStore(settings.ID, cts.Token);
 
-        return console.RenderJson(response.Value, settings, cts.Token);
+        // TODO: add non-JSON output?
+        return console.RenderJson(response.GetRawResponse(), settings, cts.Token);
     }
 
     public class ViewSettings : JsonCommandSettings
