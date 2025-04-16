@@ -245,6 +245,8 @@ COMMANDS:
 
 <!-- src/dotnet-openai/Docs/vector-file.md -->
 
+<!-- include src/dotnet-openai/Docs/vector-file-add.md -->
+
 <!-- include src/dotnet-openai/Docs/vector-file-list.md -->
 ```shell
 > openai vector file list --help
