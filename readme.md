@@ -166,6 +166,35 @@ COMMANDS:
 <!-- src/dotnet-openai/Docs/file.md -->
 
 <!-- include src/dotnet-openai/Docs/file-list.md -->
+```shell
+> openai file list --help
+DESCRIPTION:
+List files
+
+USAGE:
+    openai file list [OPTIONS]
+
+EXAMPLES:
+    openai file list --jq '.[].id'
+    openai file list --jq ".[] | { id: .id, name: .filename, purpose: .purpose 
+}"
+    openai file list --jq ".[] | select(.sizeInBytes > 100000) | .id"
+
+OPTIONS:
+    -h, --help                  Prints help information                         
+        --jq [EXPRESSION]       Filter JSON output using a jq expression        
+        --json                  Output as JSON. Implied when using --jq         
+        --monochrome            Disable colors when rendering JSON to the       
+                                console                                         
+        --range [EXPRESSION]    C# range expression to flexibly slice results   
+        --skip [SKIP]           Number of items to skip from the results        
+        --take [TAKE]           Number of items to take from the results        
+    -p, --purpose [PURPOSE]     Purpose of the file (assistants,                
+                                assistants_output, batch, batch_output, evals,  
+                                fine-tune, fine-tune-results, user_data, vision)
+```
+
+<!-- src/dotnet-openai/Docs/file-list.md -->
 
 ## Vector Stores
 
@@ -217,6 +246,37 @@ COMMANDS:
 <!-- src/dotnet-openai/Docs/vector-file.md -->
 
 <!-- include src/dotnet-openai/Docs/vector-file-list.md -->
+```shell
+> openai vector file list --help
+DESCRIPTION:
+List files associated with vector store
+
+USAGE:
+    openai vector file list <STORE_ID> [OPTIONS]
+
+ARGUMENTS:
+    <STORE_ID>    The ID of the vector store
+
+OPTIONS:
+                                DEFAULT                                         
+    -h, --help                               Prints help information            
+        --jq [EXPRESSION]                    Filter JSON output using a jq      
+                                             expression                         
+        --json                               Output as JSON. Implied when using 
+                                             --jq                               
+        --monochrome                         Disable colors when rendering JSON 
+                                             to the console                     
+        --range [EXPRESSION]                 C# range expression to flexibly    
+                                             slice results                      
+        --skip [SKIP]                        Number of items to skip from the   
+                                             results                            
+        --take [TAKE]                        Number of items to take from the   
+                                             results                            
+    -f, --filter                completed    Filter by status (in_progress,     
+                                             completed, failed, cancelled)      
+```
+
+<!-- src/dotnet-openai/Docs/vector-file-list.md -->
 
 ## Models
 
