@@ -165,6 +165,8 @@ COMMANDS:
 
 <!-- src/dotnet-openai/Docs/file.md -->
 
+<!-- include src/dotnet-openai/Docs/file-list.md -->
+
 ## Vector Stores
 
 Implements the [Vector Stores API](https://platform.openai.com/docs/api-reference/vector-stores).
@@ -213,6 +215,8 @@ COMMANDS:
 ```
 
 <!-- src/dotnet-openai/Docs/vector-file.md -->
+
+<!-- include src/dotnet-openai/Docs/vector-file-list.md -->
 
 ## Models
 
