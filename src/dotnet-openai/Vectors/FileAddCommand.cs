@@ -45,9 +45,10 @@ class FileAddCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSo
         var vectors = oai.GetVectorStoreClient();
 
         var response = await vectors.GetFileAssociationAsync(settings.StoreId, settings.FileId, cts.Token);
-        if (response.Value is null)
+        if (response.Value is null || response.GetRawResponse().IsError)
         {
-            console.MarkupLine($":cross_mark: Failed to add file to vector store");
+            console.MarkupLine($":cross_mark: Failed to add file to vector store:");
+            console.RenderJson(response.GetRawResponse(), "", settings.Monochrome, cts.Token);
             return -1;
         }
 
@@ -62,7 +63,7 @@ class FileAddCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSo
             }
         }
 
-        return console.RenderJson(response.GetRawResponse().Content.ToString(), settings.JQ, settings.Monochrome, cts.Token);
+        return console.RenderJson(response.GetRawResponse(), settings.JQ, settings.Monochrome, cts.Token);
     }
 
     public class FileAddCommandSettings : FileCommandSettings

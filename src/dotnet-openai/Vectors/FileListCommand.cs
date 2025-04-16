@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using System.Text.Json.Serialization;
 using OpenAI;
 using OpenAI.VectorStores;
 using Spectre.Console;
@@ -32,22 +31,47 @@ class FileListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenS
             return -1;
         }
 
-        var payload = result
-            .GetRawPages()
-            .SelectMany(x => JsonSerializer.Deserialize<VectorStoreFileAssociationData>(
-                x.GetRawResponse().Content.ToString(), jsonOptions)!.Data)
-            .ToList();
+        var nodes = settings.ApplyFilters(result
+                .GetRawPages()
+                .SelectMany(x => JsonSerializer.Deserialize<VectorStoreFileAssociationData>(
+                    x.GetRawResponse().Content.ToString(), jsonOptions)!.Data));
 
-        return console.RenderJson(payload, settings, cts.Token);
+        if (settings.Json)
+        {
+            return console.RenderJson(nodes, settings, cts.Token);
+        }
 
-        // TODO: provide table rendering for non-json output
-        //console.Write(store.Id);
-        //return 0;
+        var pages = result.GetRawPages();
+        var table = new Table().Border(TableBorder.Rounded)
+                               .AddColumn("[lime]File ID[/]")
+                               .AddColumn("[lime]File Name[/]")
+                               .AddColumn("[lime]Status[/]");
+
+        console.Live(table)
+            .Start(ctx =>
+        {
+            ctx.UpdateTarget(table);
+            foreach (var node in nodes)
+            {
+                var fileId = node["id"]?.ToString() ?? "N/A";
+                var fileName = node["attributes"]?["filename"]?.ToString() ?? "N/A";
+                var status = node["status"]?.ToString() ?? "N/A";
+
+                table.AddRow(fileId, fileName, status);
+                // refresh every 20 items
+                if (table.Rows.Count % 20 == 0)
+                {
+                    ctx.Refresh();
+                }
+            }
+        });
+
+        return 0;
     }
 
     record VectorStoreFileAssociationData(List<JsonNode> Data);
 
-    public class Settings : JsonCommandSettings
+    public class Settings : ListCommandSettings
     {
         [Description("The ID of the vector store")]
         [CommandArgument(0, "<STORE_ID>")]

@@ -7,9 +7,9 @@ namespace Devlooped.OpenAI.Vectors;
 
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 [Description("List vector stores")]
-class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<JsonCommandSettings>
+class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<ListCommandSettings>
 {
-    public override int Execute(CommandContext context, JsonCommandSettings settings)
+    public override int Execute(CommandContext context, ListCommandSettings settings)
     {
         var result = oai.GetVectorStoreClient().GetVectorStores();
         if (result is null)

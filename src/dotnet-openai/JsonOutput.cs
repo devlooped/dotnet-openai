@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.ClientModel.Primitives;
+using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -40,6 +41,12 @@ static class JsonOutput
         }
         return RenderJson(console, json, jq, monochrome, cancellation);
     }
+
+    public static int RenderJson(this IAnsiConsole console, PipelineResponse response, JsonCommandSettings settings, CancellationToken cancellation)
+        => RenderJson(console, response.Content.ToString(), settings.JQ, settings.Monochrome, cancellation);
+
+    public static int RenderJson(this IAnsiConsole console, string json, JsonCommandSettings settings, CancellationToken cancellation)
+        => RenderJson(console, json, settings.JQ, settings.Monochrome, cancellation);
 
     public static int RenderJson(this IAnsiConsole console, string json, FlagValue<string> jq, bool monochrome = false, CancellationToken cancellation = default)
     {

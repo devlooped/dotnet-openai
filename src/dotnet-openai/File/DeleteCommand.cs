@@ -13,7 +13,7 @@ class DeleteCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
         var response = await oai.GetOpenAIFileClient().DeleteFileAsync(settings.ID);
         if (settings.Json)
         {
-            return console.RenderJson(response.Value, settings, cts.Token);
+            return console.RenderJson(response.GetRawResponse().Content.ToString(), settings, cts.Token);
         }
         else
         {

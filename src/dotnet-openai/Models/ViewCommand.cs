@@ -12,7 +12,7 @@ class ViewCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSourc
     {
         var result = oai.GetOpenAIModelClient().GetModel(settings.Id, cts.Token);
 
-        return console.RenderJson(result.Value, settings, cts.Token);
+        return console.RenderJson(result.GetRawResponse(), settings, cts.Token);
     }
 
     public class Settings : JsonCommandSettings

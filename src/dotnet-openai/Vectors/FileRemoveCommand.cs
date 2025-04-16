@@ -13,6 +13,6 @@ class FileRemoveCommand(OpenAIClient oai, IAnsiConsole console, CancellationToke
     {
         var response = oai.GetVectorStoreClient().RemoveFileFromStore(settings.StoreId, settings.FileId, cts.Token);
 
-        return console.RenderJson(response.Value, settings, cts.Token);
+        return console.RenderJson(response.GetRawResponse(), settings, cts.Token);
     }
 }

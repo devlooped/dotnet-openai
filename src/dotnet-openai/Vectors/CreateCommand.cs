@@ -35,19 +35,21 @@ class CreateCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
         var store = await console.Status().StartAsync("Creating vector store", async ctx =>
         {
             var result = await oai.GetVectorStoreClient().CreateVectorStoreAsync(settings.WaitForCompletion, options, cts.Token);
-            return result.Value;
+            return result;
         });
 
-        if (store is null)
+        var json = store.GetRawResponse().Content.ToString();
+        if (store.Value is null)
         {
-            console.MarkupLine($":cross_mark: Failed to create vector store");
+            console.MarkupLine($":cross_mark: Failed to create vector store:");
+            console.RenderJson(json, "", settings.Monochrome, cts.Token);
             return -1;
         }
 
         if (settings.Json)
-            return console.RenderJson(store, settings, cts.Token);
+            return console.RenderJson(json, settings, cts.Token);
 
-        console.Write(store.Id);
+        console.Write(store.Value.Id);
         return 0;
     }
 

@@ -12,8 +12,16 @@ class DeleteCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
     public override int Execute(CommandContext context, DeleteSettings settings)
     {
         var response = oai.GetVectorStoreClient().DeleteVectorStore(settings.ID, cts.Token);
+        var json = response.GetRawResponse();
 
-        return console.RenderJson(response.Value, settings, cts.Token);
+        if (response.GetRawResponse().IsError)
+        {
+            console.MarkupLine($":cross_mark: Failed to delete vector store:");
+            console.RenderJson(json, "", settings.Monochrome, cts.Token);
+            return -1;
+        }
+
+        return console.RenderJson(json, settings, cts.Token);
     }
 
     public class DeleteSettings : JsonCommandSettings
