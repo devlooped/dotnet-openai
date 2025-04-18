@@ -215,17 +215,43 @@ OPTIONS:
     -h, --help    Prints help information
 
 COMMANDS:
-    create         Creates a vector store       
-    modify <ID>    Modify a vector store        
-    delete <ID>    Delete a vector store by ID  
-    list           List vector stores           
-    view <ID>      View a store by its ID       
-    file           Vector store files operations
+    create                 Creates a vector store                         
+    modify <ID>            Modify a vector store                          
+    delete <ID>            Delete a vector store by ID                    
+    list                   List vector stores                             
+    view <ID>              View a store by its ID                         
+    search <ID> <QUERY>    Performs semantic search against a vector store
+    file                   Vector store files operations                  
 ```
 
 <!-- src/dotnet-openai/Docs/vector.md -->
 
 <!-- include src/dotnet-openai/Docs/vector-search.md -->
+```shell
+> openai vector search --help
+DESCRIPTION:
+Performs semantic search against a vector store
+
+USAGE:
+    openai vector search <ID> <QUERY> [OPTIONS]
+
+ARGUMENTS:
+    <ID>       The ID of the vector store
+    <QUERY>    The query to search for   
+
+OPTIONS:
+                             DEFAULT                                            
+    -h, --help                          Prints help information                 
+        --jq [EXPRESSION]               Filter JSON output using a jq expression
+        --json                          Output as JSON. Implied when using --jq 
+        --monochrome                    Disable colors when rendering JSON to   
+                                        the console                             
+    -r, --rewrite            True       Automatically rewrite your queries for  
+                                        optimal performance                     
+    -s, --score <SCORE>      0.5        The minimum score to include in results 
+```
+
+<!-- src/dotnet-openai/Docs/vector-search.md -->
 
 <!-- include src/dotnet-openai/Docs/vector-file.md -->
 ```shell
