@@ -20,7 +20,7 @@ static class VectorsAppExtensions
                 group.AddCommand<ListCommand>("list");
                 group.AddCommand<ViewCommand>("view");
                 group.AddCommand<SearchCommand>("search")
-                    .WithExample("vector search asdf123 \"what's the return policy on headphones?\" --score 0.7");
+                    .WithExample("vector search mystore \"what's the return policy on headphones?\" --score 0.7");
 
                 group.AddBranch("file", file =>
                 {

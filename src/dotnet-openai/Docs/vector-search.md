@@ -7,7 +7,7 @@ USAGE:
     openai vector search <ID> <QUERY> [OPTIONS]
 
 EXAMPLES:
-    openai vector search asdf123 "what's the return policy on headphones?" 
+    openai vector search mystore "what's the return policy on headphones?" 
 --score 0.7
 
 ARGUMENTS:
