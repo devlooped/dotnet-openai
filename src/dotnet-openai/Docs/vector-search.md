@@ -6,6 +6,10 @@ Performs semantic search against a vector store
 USAGE:
     openai vector search <ID> <QUERY> [OPTIONS]
 
+EXAMPLES:
+    openai vector search asdf123 "what's the return policy on headphones?" 
+--score 0.7
+
 ARGUMENTS:
     <ID>       The ID of the vector store
     <QUERY>    The query to search for   
