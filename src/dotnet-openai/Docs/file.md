@@ -5,8 +5,6 @@ USAGE:
 
 EXAMPLES:
     openai file list --jq '.[].id'
-    openai file list --jq ".[] | { id: .id, name: .filename, purpose: .purpose 
-}"
     openai file list --jq ".[] | select(.sizeInBytes > 100000) | .id"
 
 OPTIONS:

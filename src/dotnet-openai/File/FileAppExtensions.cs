@@ -15,7 +15,6 @@ static class FileAppExtensions
                 group.AddCommand<DeleteCommand>("delete");
                 group.AddCommand<ListCommand>("list")
                     .WithExample("file list --jq '.[].id'")
-                    .WithExample("file list --jq \".[] | { id: .id, name: .filename, purpose: .purpose }\"")
                     .WithExample("file list --jq \".[] | select(.sizeInBytes > 100000) | .id\"");
                 group.AddCommand<ViewCommand>("view");
             });
