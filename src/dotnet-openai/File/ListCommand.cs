@@ -42,11 +42,12 @@ class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSourc
         if (settings.Json)
             return console.RenderJson(settings.ApplyFilters(result.GetRawResponse()), settings, cts.Token);
 
-        var table = new Table().Border(TableBorder.Rounded)
-                               .AddColumn("[lime]ID[/]")
-                               .AddColumn("[lime]Name[/]")
-                               .AddColumn("[lime]Status[/]")
-                               .AddColumns("[lime]Size[/]");
+        var table = new Table()
+            .Border(TableBorder.Rounded)
+            .AddColumn("[lime]ID[/]")
+            .AddColumn("[lime]Name[/]")
+            .AddColumn("[lime]Status[/]")
+            .AddColumns("[lime]Size[/]");
 
         // Adding live for better user feedback on amount of data.
         console.Live(table)

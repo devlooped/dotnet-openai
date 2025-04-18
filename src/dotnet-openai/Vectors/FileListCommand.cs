@@ -1,6 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.ClientModel.Primitives;
+using System.ComponentModel;
 using System.Text.Json;
-using System.Text.Json.Nodes;
 using OpenAI;
 using OpenAI.VectorStores;
 using Spectre.Console;
@@ -24,52 +24,49 @@ class FileListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenS
             Filter = settings.Filter,
         };
 
-        var result = oai.GetVectorStoreClient().GetFileAssociations(settings.StoreId, options, cts.Token);
+        CollectionResult result = oai.GetVectorStoreClient().GetFileAssociations(settings.StoreId, options, cts.Token);
         if (result is null)
         {
             console.MarkupLine($":cross_mark: Failed to list vector stores");
             return -1;
         }
 
-        var nodes = settings.ApplyFilters(result
-                .GetRawPages()
-                .SelectMany(x => JsonSerializer.Deserialize<VectorStoreFileAssociationData>(
-                    x.GetRawResponse().Content.ToString(), jsonOptions)!.Data));
+        var nodes = settings.ApplyFilters(result);
 
         if (settings.Json)
-        {
             return console.RenderJson(nodes, settings, cts.Token);
-        }
 
-        var pages = result.GetRawPages();
         var table = new Table().Border(TableBorder.Rounded)
                                .AddColumn("[lime]File ID[/]")
                                .AddColumn("[lime]File Name[/]")
                                .AddColumn("[lime]Status[/]");
 
+        // Adding live for better user feedback on amount of data.
         console.Live(table)
+            // Clear the "progress" table since we render the full one at the end.
+            .AutoClear(true)
             .Start(ctx =>
-        {
-            ctx.UpdateTarget(table);
-            foreach (var node in nodes)
             {
-                var fileId = node["id"]?.ToString() ?? "N/A";
-                var fileName = node["attributes"]?["filename"]?.ToString() ?? "N/A";
-                var status = node["status"]?.ToString() ?? "N/A";
-
-                table.AddRow(fileId, fileName, status);
-                // refresh every 20 items
-                if (table.Rows.Count % 20 == 0)
+                ctx.UpdateTarget(table);
+                foreach (var node in nodes["data"]!.AsArray().AsEnumerable().Where(x => x != null))
                 {
-                    ctx.Refresh();
+                    var fileId = node!["id"]?.ToString() ?? "N/A";
+                    var fileName = node["attributes"]?["filename"]?.ToString() ?? "N/A";
+                    var status = node["status"]?.ToString() ?? "N/A";
+
+                    table.AddRow(fileId, fileName, status);
+                    // refresh every 20 items
+                    if (table.Rows.Count % 20 == 0)
+                    {
+                        ctx.Refresh();
+                    }
                 }
-            }
-        });
+            });
+
+        console.Write(table);
 
         return 0;
     }
-
-    record VectorStoreFileAssociationData(List<JsonNode> Data);
 
     public class Settings : ListCommandSettings
     {

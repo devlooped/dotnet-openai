@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Humanizer;
 using OpenAI;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -12,7 +13,23 @@ class ViewCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSourc
     {
         var response = await oai.GetOpenAIFileClient().GetFileAsync(settings.ID);
 
-        return console.RenderJson(response.GetRawResponse(), settings, cts.Token);
+        if (settings.Json)
+            return console.RenderJson(response.GetRawResponse(), settings, cts.Token);
+
+        var table = new Table()
+            .Border(TableBorder.Rounded)
+            .AddColumn("[lime]ID[/]")
+            .AddColumn("[lime]Name[/]")
+            .AddColumn("[lime]Status[/]")
+            .AddColumns("[lime]Size[/]");
+
+        table.AddRow(response.Value.Id, response.Value.Filename,
+            response.Value.Status.ToString(),
+            response.Value.SizeInBytes.GetValueOrDefault().Bytes().Humanize());
+
+        console.Write(table);
+
+        return 0;
     }
 
     public class ViewSettings : JsonCommandSettings
