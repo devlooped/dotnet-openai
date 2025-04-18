@@ -3,12 +3,13 @@ using OpenAI;
 using OpenAI.VectorStores;
 using Spectre.Console;
 using Spectre.Console.Cli;
+using static Devlooped.OpenAI.Vectors.ModifyCommand;
 
 namespace Devlooped.OpenAI.Vectors;
 
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 [Description("Modify a vector store")]
-class ModifyCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<ModifyCommand.ModifySettings>
+class ModifyCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<ModifySettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, ModifySettings settings)
     {
@@ -26,7 +27,7 @@ class ModifyCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
             options.ExpirationPolicy = new VectorStoreExpirationPolicy(VectorStoreExpirationAnchor.LastActiveAt, settings.ExpiresAfter.Value);
         }
 
-        var result = await oai.GetVectorStoreClient().ModifyVectorStoreAsync(settings.ID, options, cts.Token);
+        var result = await oai.GetVectorStoreClient().ModifyVectorStoreAsync(settings.Id, options, cts.Token);
         if (result.Value is null)
         {
             console.MarkupLine($":cross_mark: Failed to modify vector store");
@@ -41,7 +42,7 @@ class ModifyCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
     {
         [Description("The ID of the vector store")]
         [CommandArgument(0, "<ID>")]
-        public required string ID { get; init; }
+        public required string Id { get; init; }
 
         [Description("The name of the vector store")]
         [CommandOption("-n|--name [NAME]")]

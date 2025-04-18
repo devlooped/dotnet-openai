@@ -1,4 +1,6 @@
-﻿using System.ComponentModel;
+﻿using System.ClientModel.Primitives;
+using System.ComponentModel;
+using Humanizer;
 using OpenAI;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -11,17 +13,47 @@ class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSourc
 {
     public override int Execute(CommandContext context, ListCommandSettings settings)
     {
-        var result = oai.GetVectorStoreClient().GetVectorStores();
+        CollectionResult result = oai.GetVectorStoreClient().GetVectorStores();
         if (result is null)
         {
             console.MarkupLine($":cross_mark: Failed to list vector stores");
             return -1;
         }
 
-        return console.RenderJson(result, settings, cts.Token);
+        var nodes = settings.ApplyFilters(result);
 
-        // TODO: provide table rendering for non-json output
-        //console.Write(store.Id);
-        //return 0;
+        if (settings.Json)
+            return console.RenderJson(nodes, settings, cts.Token);
+
+        var table = new Table()
+            .Border(TableBorder.Rounded)
+            .AddColumn("[lime]ID[/]")
+            .AddColumn("[lime]Name[/]")
+            .AddColumn("[lime]Files[/]", x => x.RightAligned())
+            .AddColumn("[lime]Size[/]", x => x.RightAligned())
+            .AddColumn("[lime]Last Active[/]");
+
+        // Adding live for better user feedback on amount of data.
+        console.Live(table)
+            // Clear the "progress" table since we render the full one at the end.
+            .AutoClear(true)
+            .Start(ctx =>
+            {
+                ctx.UpdateTarget(table);
+                foreach (var node in nodes["data"]!.AsArray().AsEnumerable().Where(x => x != null))
+                {
+                    table.AddRow(
+                        node!["id"]!.ToString(),
+                        node["name"]!.ToString(),
+                        node["file_counts"]!["total"]!.ToString(),
+                        int.Parse(node["usage_bytes"]!.ToString()).Bytes().Humanize(),
+                        DateTimeOffset.FromUnixTimeSeconds(long.Parse(node["last_active_at"]!.ToString())).ToString("yyyy-MM-dd T HH:mm")
+                    );
+                }
+            });
+
+        console.Write(table);
+
+        return 0;
     }
 }

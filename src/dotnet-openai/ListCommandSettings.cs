@@ -47,6 +47,40 @@ public class ListCommandSettings : JsonCommandSettings
 
     public List<T> ApplyFilters<T>(IEnumerable<T> values) => ApplyFilters(values.ToList());
 
+    public JsonObject ApplyFilters(CollectionResult values)
+    {
+        var nodes = new List<JsonNode?>();
+        var result = new JsonObject();
+        var first = true;
+
+        foreach (var page in values.GetRawPages())
+        {
+            var json = page.GetRawResponse().Content.ToString();
+            var node = JsonNode.Parse(json);
+            if (node is null || node.Root.GetValueKind() != System.Text.Json.JsonValueKind.Object ||
+                node["object"]?.ToString() != "list")
+                throw new ArgumentException("Expected a response JSON object with \"object\": \"list\"");
+
+            if (first)
+                result["object"] = node["object"]!.DeepClone();
+
+            if (first && result["search_query"] is { } query)
+                result["search_query"] = query.DeepClone();
+
+            var data = node["data"];
+            if (data is null || data.GetValueKind() != System.Text.Json.JsonValueKind.Array)
+                throw new ArgumentException("Expected a response JSON object with \"data\": []");
+
+            nodes.AddRange(((JsonArray)data).AsEnumerable());
+            first = false;
+        }
+
+        nodes = ApplyFilters(nodes);
+        result["data"] = new JsonArray([.. nodes.Where(x => x != null).Select(x => x!.DeepClone())]);
+
+        return result;
+    }
+
     public List<T> ApplyFilters<T>(List<T> collection)
     {
         if (Range.IsSet)
