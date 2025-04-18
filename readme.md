@@ -224,6 +224,9 @@ COMMANDS:
 ```
 
 <!-- src/dotnet-openai/Docs/vector.md -->
+
+<!-- include src/dotnet-openai/Docs/vector-search.md -->
+
 <!-- include src/dotnet-openai/Docs/vector-file.md -->
 ```shell
 > openai vector file --help

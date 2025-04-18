@@ -53,6 +53,7 @@
     <CommandHelp Include="model" />
     <CommandHelp Include="vector" />
     <CommandHelp Include="vector list" />
+    <CommandHelp Include="vector search" />
     <CommandHelp Include="vector file" />
     <CommandHelp Include="vector file add" />
     <CommandHelp Include="vector file list" />

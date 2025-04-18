@@ -12,10 +12,11 @@ OPTIONS:
     -h, --help    Prints help information
 
 COMMANDS:
-    create         Creates a vector store       
-    modify <ID>    Modify a vector store        
-    delete <ID>    Delete a vector store by ID  
-    list           List vector stores           
-    view <ID>      View a store by its ID       
-    file           Vector store files operations
+    create                 Creates a vector store       
+    modify <ID>            Modify a vector store        
+    delete <ID>            Delete a vector store by ID  
+    list                   List vector stores           
+    view <ID>              View a store by its ID       
+    search <ID> <QUERY>                                 
+    file                   Vector store files operations
 ```

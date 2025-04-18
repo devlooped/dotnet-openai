@@ -103,9 +103,8 @@ public class ListCommandSettings : JsonCommandSettings
     public string ApplyFilters(string json)
     {
         var node = JsonNode.Parse(json);
-        if (node is null || node.Root.GetValueKind() != System.Text.Json.JsonValueKind.Object ||
-            node["object"]?.ToString() != "list")
-            throw new ArgumentException("Expected a response JSON object with \"object\": \"list\"");
+        if (node is null || node.Root.GetValueKind() != System.Text.Json.JsonValueKind.Object)
+            throw new ArgumentException("Expected a response JSON object");
 
         var data = node["data"];
         if (data is null || data.GetValueKind() != System.Text.Json.JsonValueKind.Array)
