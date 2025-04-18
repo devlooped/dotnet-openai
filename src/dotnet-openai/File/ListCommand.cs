@@ -58,7 +58,9 @@ class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSourc
                 ctx.UpdateTarget(table);
                 foreach (var file in settings.ApplyFilters(result.Value.ToList()))
                 {
+#pragma warning disable CS0618 // Status is obsolete
                     table.AddRow(file.Id, file.Filename, file.Status.ToString(), file.SizeInBytes.GetValueOrDefault().Bytes().Humanize());
+#pragma warning restore CS0618 // Status is obsolete
                     // refresh every 20 items
                     if (table.Rows.Count % 20 == 0)
                     {

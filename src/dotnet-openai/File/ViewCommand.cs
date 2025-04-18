@@ -24,7 +24,9 @@ class ViewCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSourc
             .AddColumns("[lime]Size[/]");
 
         table.AddRow(response.Value.Id, response.Value.Filename,
+#pragma warning disable CS0618 // Status is obsolete
             response.Value.Status.ToString(),
+#pragma warning restore CS0618 // Status is obsolete
             response.Value.SizeInBytes.GetValueOrDefault().Bytes().Humanize());
 
         console.Write(table);
