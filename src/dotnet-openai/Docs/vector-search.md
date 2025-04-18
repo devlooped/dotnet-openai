@@ -1,5 +1,8 @@
 ﻿```shell
 > openai vector search --help
+DESCRIPTION:
+Performs semantic search against a vector store
+
 USAGE:
     openai vector search <ID> <QUERY> [OPTIONS]
 
@@ -14,8 +17,6 @@ OPTIONS:
         --json                          Output as JSON. Implied when using --jq 
         --monochrome                    Disable colors when rendering JSON to   
                                         the console                             
-    -a, --attribute                     Vector file attributes to filter  as    
-                                        KEY=VALUE                               
     -r, --rewrite            True       Automatically rewrite your queries for  
                                         optimal performance                     
     -s, --score <SCORE>      0.5        The minimum score to include in results 
