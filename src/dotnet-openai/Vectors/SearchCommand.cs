@@ -6,6 +6,7 @@ using System.Text.Json.Nodes;
 using OpenAI;
 using Spectre.Console;
 using Spectre.Console.Cli;
+using Spectre.Console.Rendering;
 using static Devlooped.OpenAI.Vectors.SearchCommand;
 
 namespace Devlooped.OpenAI.Vectors;
@@ -46,10 +47,9 @@ class SearchCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
         console.MarkupLine($"[lime]Query:[/] [grey]{node!["search_query"]![0]!.ToString()}[/]");
 
         var table = new Table().Border(TableBorder.Rounded)
-                               .AddColumn("[lime]File ID[/]")
-                               .AddColumn("[lime]File Name[/]")
-                               .AddColumn("[lime]Score[/]")
-                               .AddColumn("[lime]Text[/]");
+                               .AddColumn("[lime]File[/]")
+                               .AddColumn("[lime]Text[/]")
+                               .HideHeaders();
 
         // Adding live for better user feedback on amount of data.
         console.Live(table)
@@ -57,7 +57,6 @@ class SearchCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
             .AutoClear(true)
             .Start(ctx =>
             {
-                ctx.UpdateTarget(table);
                 foreach (var node in data)
                 {
                     var fileId = node!["file_id"]?.ToString() ?? "N/A";
@@ -67,7 +66,21 @@ class SearchCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
                         node["content"]!.AsArray()[0]!["text"]?.ToString() ?? "" :
                         node["content"]?.ToJsonString() ?? "";
 
-                    table.AddRow(fileId, fileName, score, text);
+                    table.AddRow(
+                    [
+                        // Use a more compact representation since typically the 
+                        // text will be far longer and can use the additional width
+                        new Table().HideHeaders().NoBorder().AddColumns("", "")
+                            .AddRow("[lime]ID[/]", fileId)
+                            .AddRow("[lime]Name[/]", fileName)
+                            .AddRow("[lime]Score[/]", score),
+                        new Paragraph(text)
+                    ]);
+
+                    // Set initial live target after we have some data
+                    if (table.Rows.Count == 1)
+                        ctx.UpdateTarget(table);
+
                     // refresh every 10 items
                     if (table.Rows.Count % 10 == 0)
                     {
