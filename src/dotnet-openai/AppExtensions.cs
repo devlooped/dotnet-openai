@@ -1,4 +1,5 @@
-﻿using NuGet.Configuration;
+﻿using DotNetConfig;
+using NuGet.Configuration;
 using NuGet.Protocol.Core.Types;
 using NuGet.Versioning;
 using Spectre.Console;
@@ -31,7 +32,7 @@ static class AppExtensions
     /// </summary>
     public static async Task ShowUpdatesAsync(this ICommandApp app, string[] args)
     {
-        if (await GetUpdatesAsync(args) is { Length: > 0 } messages)
+        if (await GetUpdatesAsync(args, true) is { Length: > 0 } messages)
         {
             foreach (var message in messages)
                 AnsiConsole.MarkupLine(message);
@@ -48,10 +49,21 @@ static class AppExtensions
         AnsiConsole.MarkupLine($"[link]{ThisAssembly.Git.Url}/releases/tag/{ThisAssembly.Project.BuildRef}[/]");
     }
 
-    static async Task<string[]> GetUpdatesAsync(string[] args)
+    static async Task<string[]> GetUpdatesAsync(string[] args, bool forced = false)
     {
         if (args.Contains("-u") || args.Contains("--unattended"))
             return [];
+
+        var config = Config.Build(ConfigLevel.Global).GetSection(ThisAssembly.Project.ToolCommandName);
+
+        // Check once a day max
+        if (!forced)
+        {
+            var lastCheck = config.GetDateTime("checked") ?? DateTime.UtcNow.AddDays(-2);
+            // if it's been > 24 hours since the last check, we'll check again
+            if (lastCheck > DateTime.UtcNow.AddDays(-1))
+                return [];
+        }
 
         // We check from a different feed in this case.
         var civersion = ThisAssembly.Project.VersionPrefix.StartsWith("42.42.");
@@ -59,7 +71,7 @@ static class AppExtensions
         var providers = Repository.Provider.GetCoreV3();
         var repository = new SourceRepository(new PackageSource(
             // use CI feed rather than production feed depending on which version we're using
-            civersion ?
+            civersion && !string.IsNullOrEmpty(ThisAssembly.Project.SLEET_FEED_URL) ?
             ThisAssembly.Project.SLEET_FEED_URL :
             "https://api.nuget.org/v3/index.json"), providers);
         var resource = await repository.GetResourceAsync<PackageMetadataResource>();
@@ -79,6 +91,8 @@ static class AppExtensions
             .OrderByDescending(x => x.Version)
             .Select(x => x.Version)
             .FirstOrDefault();
+
+        config.SetDateTime("checked", DateTime.UtcNow);
 
         if (update != null)
         {
