@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -7,6 +8,7 @@ namespace Devlooped.OpenAI.Vectors;
 
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 [Description("Delete a vector store by ID.")]
+[Service]
 class DeleteCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<DeleteCommand.DeleteSettings>
 {
     public override int Execute(CommandContext context, DeleteSettings settings)
@@ -21,7 +23,15 @@ class DeleteCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
             return -1;
         }
 
-        return console.RenderJson(json, settings, cts.Token);
+        if (settings.Json)
+        {
+            return console.RenderJson(response.GetRawResponse().Content.ToString(), settings, cts.Token);
+        }
+        else
+        {
+            console.WriteLine(response.Value.Deleted.ToString().ToLowerInvariant());
+            return 0;
+        }
     }
 
     public class DeleteSettings : JsonCommandSettings

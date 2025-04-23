@@ -1,6 +1,7 @@
 ﻿using System.ClientModel.Primitives;
 using System.ComponentModel;
 using Humanizer;
+using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -9,6 +10,7 @@ namespace Devlooped.OpenAI.Vectors;
 
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 [Description("List vector stores")]
+[Service]
 class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<ListCommandSettings>
 {
     public override int Execute(CommandContext context, ListCommandSettings settings)

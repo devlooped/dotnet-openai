@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 using GitCredentialManager;
+using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
@@ -19,6 +19,7 @@ namespace Devlooped.OpenAI.Auth;
 
     For example, to use {{{ThisAssembly.Project.ToolCommandName}}} in GitHub Actions, add `OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}` to "env".
     """)]
+[Service]
 public class LoginCommand(IAnsiConsole console, ICredentialStore store) : Command<LoginCommand.LoginSettings>
 {
     public override int Execute(CommandContext context, LoginSettings settings)

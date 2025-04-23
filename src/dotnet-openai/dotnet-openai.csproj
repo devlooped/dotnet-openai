@@ -8,6 +8,7 @@
     <Description>An OpenAI CLI</Description>
     <ToolCommandName>openai</ToolCommandName>
     <PackageTags>openai dotnet-tool</PackageTags>
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
 
     <BuildDate>$([System.DateTime]::Now.ToString("yyyy-MM-dd"))</BuildDate>
     <BuildRef>$(GITHUB_REF_NAME)</BuildRef>
@@ -16,6 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Devlooped.Extensions.DependencyInjection" Version="42.42.449-main" PrivateAssets="all" />
     <PackageReference Include="Devlooped.JQ" Version="1.7.1.8" />
     <PackageReference Include="Devlooped.Sponsors.Commands" Version="42.42.1585-main" />
     <PackageReference Include="DotNetConfig" Version="1.2.0" />

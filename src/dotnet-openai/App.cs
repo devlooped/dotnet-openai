@@ -1,8 +1,10 @@
-﻿using Devlooped.Sponsors;
+﻿using System.Diagnostics.CodeAnalysis;
+using Devlooped.Sponsors;
 using GitCredentialManager;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
+using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Devlooped.OpenAI;
@@ -13,12 +15,28 @@ public static class App
 
     static App() => Console.CancelKeyPress += (s, e) => shutdownCancellation.Cancel();
 
+    /// <summary>
+    /// Whether the CLI app is not interactive (i.e. part of a script run, 
+    /// running in CI, or in a non-interactive user session).
+    /// </summary>
+    public static bool IsNonInteractive => !Environment.UserInteractive
+        || Console.IsInputRedirected
+        || Console.IsOutputRedirected;
+
     public static CommandApp Create() => Create(out _);
 
-    public static CommandApp Create(out IServiceProvider services)
-    {
-        var collection = new ServiceCollection();
+    public static CommandApp Create([NotNull] out IServiceProvider services)
+        => Create(new ServiceCollection(), out services);
 
+    public static CommandApp Create(IAnsiConsole console, [NotNull] out IServiceProvider services)
+    {
+        var app = Create(new ServiceCollection().AddSingleton(console), out services);
+        app.Configure(config => config.ConfigureConsole(console));
+        return app;
+    }
+
+    static CommandApp Create(IServiceCollection collection, [NotNull] out IServiceProvider services)
+    {
         var config = new ConfigurationBuilder()
             .AddEnvironmentVariables()
 #if DEBUG
@@ -45,6 +63,7 @@ public static class App
         });
 
         collection.ConfigureSponsors();
+        collection.AddServices();
 
         var registrar = new TypeRegistrar(collection);
         var app = new CommandApp(registrar);

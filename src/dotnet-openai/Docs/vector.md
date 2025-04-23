@@ -17,7 +17,7 @@ COMMANDS:
     modify <ID>            Modify a vector store                          
     delete <ID>            Delete a vector store by ID                    
     list                   List vector stores                             
-    view <ID>              View a store by its ID                         
+    view                   View a store by its ID                         
     search <ID> <QUERY>    Performs semantic search against a vector store
     file                   Vector store files operations                  
 ```

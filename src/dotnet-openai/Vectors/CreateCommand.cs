@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
 using OpenAI.VectorStores;
 using Spectre.Console;
@@ -8,6 +9,7 @@ namespace Devlooped.OpenAI.Vectors;
 
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 [Description("Creates a vector store")]
+[Service]
 class CreateCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<CreateCommand.CreateSettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, CreateSettings settings)

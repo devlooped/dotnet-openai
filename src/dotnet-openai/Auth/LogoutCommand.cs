@@ -1,11 +1,13 @@
 ﻿using System.ComponentModel;
 using GitCredentialManager;
+using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Devlooped.OpenAI.Auth;
 
 [Description("Log out of api.openai.com")]
+[Service]
 class LogoutCommand(ICredentialStore store, IAnsiConsole console) : Command
 {
     public override int Execute(CommandContext context)

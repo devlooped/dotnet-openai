@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
 using OpenAI.Files;
 using Spectre.Console;
@@ -8,6 +9,7 @@ using Spectre.Console.Cli;
 namespace Devlooped.OpenAI.File;
 
 [Description("Upload a local file, specifying its purpose.")]
+[Service]
 class UploadCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<UploadCommand.UploadSettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, UploadSettings settings)

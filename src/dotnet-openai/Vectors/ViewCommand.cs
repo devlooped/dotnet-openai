@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Humanizer;
+using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -8,6 +9,7 @@ namespace Devlooped.OpenAI.Vectors;
 
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 [Description("View a store by its ID.")]
+[Service]
 class ViewCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<ViewCommand.ViewSettings>
 {
     public override int Execute(CommandContext context, ViewSettings settings)
