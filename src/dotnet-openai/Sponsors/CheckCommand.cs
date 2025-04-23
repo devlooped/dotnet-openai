@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Devlooped.Sponsors;
+using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using static Devlooped.OpenAI.Sponsors.CheckCommand;
@@ -7,6 +8,7 @@ using static Devlooped.OpenAI.Sponsors.CheckCommand;
 namespace Devlooped.OpenAI.Sponsors;
 
 [Description("Checks the current sponsorship status with [lime]devlooped[/], entirely offline")]
+[Service]
 class CheckCommand(IAnsiConsole console) : Command<CheckSettings>
 {
     public class CheckSettings : CommandSettings
@@ -17,11 +19,10 @@ class CheckCommand(IAnsiConsole console) : Command<CheckSettings>
 
     public override int Execute(CommandContext context, CheckSettings settings)
     {
-        var nonInteractive = !Environment.UserInteractive || Console.IsInputRedirected || Console.IsOutputRedirected;
         // Don't render anything if not interactive, so we don't disrupt usage in CI for example.
         // In GH actions, console input/output is redirected, for example, and output is redirected 
         // when using the app in a powershell pipeline or capturing its output in a variable.
-        if (nonInteractive)
+        if (App.IsNonInteractive)
             return 0;
 
         // Check if we have a manifest at all

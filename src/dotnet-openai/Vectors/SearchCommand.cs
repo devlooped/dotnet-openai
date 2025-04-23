@@ -3,15 +3,16 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
 using Spectre.Console;
 using Spectre.Console.Cli;
-using Spectre.Console.Rendering;
 using static Devlooped.OpenAI.Vectors.SearchCommand;
 
 namespace Devlooped.OpenAI.Vectors;
 
 [Description("Performs semantic search against a vector store")]
+[Service]
 class SearchCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<SearchSettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, SearchSettings settings)

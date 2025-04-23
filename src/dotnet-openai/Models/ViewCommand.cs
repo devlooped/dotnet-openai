@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -6,6 +7,7 @@ using Spectre.Console.Cli;
 namespace Devlooped.OpenAI.Models;
 
 [Description("View model details")]
+[Service]
 class ViewCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<ViewCommand.Settings>
 {
     public override int Execute(CommandContext context, Settings settings)

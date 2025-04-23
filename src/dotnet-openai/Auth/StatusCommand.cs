@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using GitCredentialManager;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -9,6 +10,7 @@ using Spectre.Console.Cli;
 namespace Devlooped.OpenAI.Auth;
 
 [Description("Shows the current authentication status")]
+[Service]
 class StatusCommand(IAnsiConsole console, IConfiguration configuration, ICredentialStore store, OpenAIClient client) : AsyncCommand<StatusCommand.StatusSettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, StatusSettings settings)

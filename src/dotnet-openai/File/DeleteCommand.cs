@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -6,6 +7,7 @@ using Spectre.Console.Cli;
 namespace Devlooped.OpenAI.File;
 
 [Description("Delete a file by its ID.")]
+[Service]
 class DeleteCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<DeleteCommand.DeleteSettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, DeleteSettings settings)
@@ -17,7 +19,7 @@ class DeleteCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
         }
         else
         {
-            console.Write(response.Value.Deleted.ToString().ToLowerInvariant());
+            console.WriteLine(response.Value.Deleted.ToString().ToLowerInvariant());
             return 0;
         }
     }

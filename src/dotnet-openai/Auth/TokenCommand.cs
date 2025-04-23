@@ -1,12 +1,14 @@
 ﻿using System.ComponentModel;
 using GitCredentialManager;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console;
 using Spectre.Console.Cli;
 
 namespace Devlooped.OpenAI.Auth;
 
 [Description($"Print the auth token {ThisAssembly.Project.ToolCommandName} is configured to use")]
+[Service]
 class TokenCommand(IConfiguration configuration, ICredentialStore store, IAnsiConsole console) : Command
 {
     public override int Execute(CommandContext context)

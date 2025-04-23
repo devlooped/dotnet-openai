@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Humanizer;
+using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
 using Spectre.Console;
 using Spectre.Console.Cli;
@@ -7,6 +8,7 @@ using Spectre.Console.Cli;
 namespace Devlooped.OpenAI.File;
 
 [Description("View a file by its ID.")]
+[Service]
 class ViewCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<ViewCommand.ViewSettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, ViewSettings settings)
