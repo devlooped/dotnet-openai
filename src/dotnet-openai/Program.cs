@@ -44,11 +44,18 @@ if (args.Contains("--version"))
     return 0;
 }
 
+var result = 0;
+
 #if DEBUG
-return await app.RunAsync(args);
+result = await app.RunAsync(args);
 #else
-return await app.RunWithUpdatesAsync(args);
+result = await app.RunWithUpdatesAsync(args);
 #endif
+
+// --quiet does not report sponsor tier on every run.
+app.Run(["sponsor", "check", "--quiet"]);
+
+return result;
 
 static IEnumerable<string> ExpandResponseFiles(IEnumerable<string> args)
 {

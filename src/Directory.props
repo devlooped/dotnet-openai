@@ -6,6 +6,7 @@
     <UserSecretsId>94e34f89-74fd-421f-838e-ecc8e06bc1a3</UserSecretsId>
     <!-- Clear suffix to get clean 42.42.* versions from main for easier install/update -->
     <VersionSuffix Condition="$(VersionSuffix) == 'main'"></VersionSuffix>
+    <RestoreSources>https://api.nuget.org/v3/index.json;https://pkg.kzu.app/index.json</RestoreSources>
   </PropertyGroup>
 
 </Project>
