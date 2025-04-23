@@ -350,6 +350,14 @@ COMMANDS:
 
 <!-- src/dotnet-openai/Docs/model.md -->
 
+## Sponsoring
+
+You can support further development of this tool by sponsoring. The tool offers various 
+commands to sync your sponsorship status, powered by [SponsorLink](https://github.com/devlooped/#sponsorlink).
+
+<!-- include src/dotnet-openai/Docs/sponsor.md -->
+<!-- include src/dotnet-openai/Docs/sponsor-sync.md -->
+
 <!-- #content -->
 <!-- include https://github.com/devlooped/sponsors/raw/main/footer.md -->
 # Sponsors 

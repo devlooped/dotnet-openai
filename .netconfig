@@ -134,3 +134,9 @@
 	sha = f2b690ce307acb76c5b8d7faec1a5b971a93653e
 	etag = 27ea11baa2397b3ec9e643a935832da97719c4e44215cfd135c49cad4c29373f
 	weak
+[file "src/dotnet-openai/Sponsors/SponsorManifest.cs"]
+	url = https://github.com/devlooped/SponsorLink/blob/main/samples/dotnet/SponsorLink/SponsorManifest.cs
+	sha = a755e4be0f7cb73cfde208857e28f7cfeba2dcc3
+
+	etag = 55ef89e8441156541c1c74a50675b7f56633b56493031f0ffa877460839e3536
+	weak

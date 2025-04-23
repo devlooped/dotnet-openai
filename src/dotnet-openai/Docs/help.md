@@ -15,8 +15,9 @@ OPTIONS:
     -h, --help    Prints help information
 
 COMMANDS:
-    auth       
-    file       
-    vector     
-    model      
+    auth        
+    file        
+    vector      
+    model       
+    sponsor     
 ```

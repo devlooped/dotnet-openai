@@ -1,4 +1,5 @@
-﻿using GitCredentialManager;
+﻿using Devlooped.Sponsors;
+using GitCredentialManager;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
@@ -43,6 +44,8 @@ public static class App
             return new OpenAIClient(apikey);
         });
 
+        collection.ConfigureSponsors();
+
         var registrar = new TypeRegistrar(collection);
         var app = new CommandApp(registrar);
         registrar.Services.AddSingleton<ICommandApp>(app);
@@ -58,6 +61,7 @@ public static class App
         app.UseFiles();
         app.UseVectors();
         app.UseModels();
+        app.UseSponsors();
 
         services = registrar.Services.BuildServiceProvider();
 
