@@ -28,10 +28,11 @@ OPTIONS:
     -h, --help    Prints help information
 
 COMMANDS:
-    auth       
-    file       
-    vector     
-    model      
+    auth        
+    file        
+    vector      
+    model       
+    sponsor     
 ```
 
 <!-- src/dotnet-openai/Docs/help.md -->
@@ -215,7 +216,7 @@ COMMANDS:
     modify <ID>            Modify a vector store                          
     delete <ID>            Delete a vector store by ID                    
     list                   List vector stores                             
-    view <ID>              View a store by its ID                         
+    view                   View a store by its ID                         
     search <ID> <QUERY>    Performs semantic search against a vector store
     file                   Vector store files operations                  
 ```
@@ -356,7 +357,46 @@ You can support further development of this tool by sponsoring. The tool offers 
 commands to sync your sponsorship status, powered by [SponsorLink](https://github.com/devlooped/#sponsorlink).
 
 <!-- include src/dotnet-openai/Docs/sponsor.md -->
+```shell
+> openai sponsor --help
+USAGE:
+    openai sponsor [OPTIONS] <COMMAND>
+
+OPTIONS:
+    -h, --help    Prints help information
+
+COMMANDS:
+    check     Checks the current sponsorship status with devlooped, entirely    
+              offline                                                           
+    config    Manages sponsorlink configuration                                 
+    view      Validates and displays the sponsor manifest for devlooped, if     
+              present                                                           
+    sync      Synchronizes the sponsorship manifest for devlooped               
+```
+
+<!-- src/dotnet-openai/Docs/sponsor.md -->
 <!-- include src/dotnet-openai/Docs/sponsor-sync.md -->
+```shell
+> openai sponsor sync --help
+DESCRIPTION:
+Synchronizes the sponsorship manifest for devlooped
+
+USAGE:
+    openai sponsor sync [OPTIONS]
+
+OPTIONS:
+    -h, --help          Prints help information                                 
+        --autosync      Enable or disable automatic synchronization of expired  
+                        manifests                                               
+    -f, --force         Force sync, regardless of expiration of manifests found 
+                        locally                                                 
+    -v, --validate      Validate local manifests using the issuer public key    
+    -u, --unattended    Prevent interactive credentials refresh                 
+        --with-token    Read GitHub authentication token from standard input for
+                        sync                                                    
+```
+
+<!-- src/dotnet-openai/Docs/sponsor-sync.md -->
 
 <!-- #content -->
 <!-- include https://github.com/devlooped/sponsors/raw/main/footer.md -->
