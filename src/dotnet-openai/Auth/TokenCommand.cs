@@ -9,7 +9,7 @@ namespace Devlooped.OpenAI.Auth;
 
 [Description($"Print the auth token {ThisAssembly.Project.ToolCommandName} is configured to use")]
 [Service]
-class TokenCommand(IConfiguration configuration, ICredentialStore store, IAnsiConsole console) : Command
+public class TokenCommand(IConfiguration configuration, ICredentialStore store, IAnsiConsole console) : Command
 {
     public override int Execute(CommandContext context)
     {

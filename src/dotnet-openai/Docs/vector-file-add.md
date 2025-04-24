@@ -4,11 +4,11 @@ DESCRIPTION:
 Add file to vector store
 
 USAGE:
-    openai vector file add <STORE_ID> <FILE_ID> [OPTIONS]
+    openai vector file add <STORE> <FILE_ID> [OPTIONS]
 
 ARGUMENTS:
-    <STORE_ID>    The ID of the vector store        
-    <FILE_ID>     File ID to add to the vector store
+    <STORE>      The ID or name of the vector store
+    <FILE_ID>    File ID to add to the vector store
 
 OPTIONS:
     -h, --help               Prints help information                          

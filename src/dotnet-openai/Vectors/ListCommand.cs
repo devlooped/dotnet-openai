@@ -11,7 +11,7 @@ namespace Devlooped.OpenAI.Vectors;
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 [Description("List vector stores")]
 [Service]
-class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<ListCommandSettings>
+public class ListCommand(OpenAIClient oai, IAnsiConsole console, VectorIdMapper mapper, CancellationTokenSource cts) : Command<ListCommandSettings>
 {
     public override int Execute(CommandContext context, ListCommandSettings settings)
     {
@@ -44,9 +44,14 @@ class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSourc
                 ctx.UpdateTarget(table);
                 foreach (var node in nodes["data"]!.AsArray().AsEnumerable().Where(x => x != null))
                 {
+                    var id = node!["id"]!.ToString();
+                    var name = node["name"]!.ToString();
+
+                    mapper.SetId(name, id);
+
                     table.AddRow(
-                        node!["id"]!.ToString(),
-                        node["name"]!.ToString(),
+                        id,
+                        name,
                         node["file_counts"]!["total"]!.ToString(),
                         int.Parse(node["usage_bytes"]!.ToString()).Bytes().Humanize(),
                         DateTimeOffset.FromUnixTimeSeconds(long.Parse(node["last_active_at"]!.ToString())).ToString("yyyy-MM-dd T HH:mm")

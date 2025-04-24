@@ -8,7 +8,7 @@ namespace Devlooped.OpenAI.Models;
 
 [Description("List available models")]
 [Service]
-class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<ListCommandSettings>
+public class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<ListCommandSettings>
 {
     public override int Execute(CommandContext context, ListCommandSettings settings)
     {

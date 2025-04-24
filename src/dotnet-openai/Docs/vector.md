@@ -13,11 +13,11 @@ OPTIONS:
     -h, --help    Prints help information
 
 COMMANDS:
-    create                 Creates a vector store                         
-    modify <ID>            Modify a vector store                          
-    delete <ID>            Delete a vector store by ID                    
-    list                   List vector stores                             
-    view                   View a store by its ID                         
-    search <ID> <QUERY>    Performs semantic search against a vector store
-    file                   Vector store files operations                  
+    create                    Creates a vector store                         
+    modify <STORE>            Modify a vector store                          
+    delete <STORE>            Delete a vector store by ID or name            
+    list                      List vector stores                             
+    view <STORE>              View a store by its ID or name                 
+    search <STORE> <QUERY>    Performs semantic search against a vector store
+    file                      Vector store files operations                  
 ```

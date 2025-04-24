@@ -1,5 +1,4 @@
 ﻿using System.ClientModel.Primitives;
-using System.Diagnostics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -26,10 +25,7 @@ static class JsonOutput
     };
 
     public static int RenderJson<T>(this IAnsiConsole console, T value, JsonCommandSettings settings, CancellationToken cancellation)
-        => RenderJson(console, value, settings.JQ, settings.Monochrome, cancellation);
-
-    public static int RenderJson<T>(this IAnsiConsole console, T value, FlagValue<string> jq, bool monochrome = false, CancellationToken cancellation = default)
-        => RenderJson(console, value, jq.IsSet ? jq.Value : default, monochrome, cancellation);
+        => RenderJson(console, value, settings.JQ.IsSet ? settings.JQ.Value : default, settings.Monochrome, cancellation);
 
     public static int RenderJson<T>(this IAnsiConsole console, T value, string? jq = default, bool monochrome = false, CancellationToken cancellation = default)
     {
@@ -41,6 +37,12 @@ static class JsonOutput
         }
         return RenderJson(console, json, jq, monochrome, cancellation);
     }
+
+    public static int RenderJson(this IAnsiConsole console, PipelineResponse response, string? jq = default, bool monochrome = false, CancellationToken cancellation = default)
+        => RenderJson(console, response.Content.ToString(), "", monochrome, cancellation);
+
+    public static int RenderJson(this IAnsiConsole console, PipelineResponse response, bool monochrome = false, CancellationToken cancellation = default)
+        => RenderJson(console, response.Content.ToString(), "", monochrome, cancellation);
 
     public static int RenderJson(this IAnsiConsole console, PipelineResponse response, JsonCommandSettings settings, CancellationToken cancellation)
         => RenderJson(console, response.Content.ToString(), settings.JQ, settings.Monochrome, cancellation);
@@ -60,7 +62,7 @@ static class JsonOutput
 
     public static int RenderJson(this IAnsiConsole console, string json, string jq, bool monochrome = false, CancellationToken cancellation = default)
     {
-        var info = new ProcessStartInfo(JQ.Path)
+        var info = new System.Diagnostics.ProcessStartInfo(JQ.Path)
         {
             RedirectStandardError = true,
             RedirectStandardOutput = true,
@@ -90,7 +92,7 @@ static class JsonOutput
             info.ArgumentList.Add(jq.Trim());
         }
 
-        var process = Process.Start(info);
+        var process = System.Diagnostics.Process.Start(info);
         if (process == null)
         {
             console.MarkupLine($":cross_mark: Could not start JQ from {JQ.Path}");

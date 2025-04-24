@@ -2,6 +2,8 @@
 using System.Runtime.InteropServices;
 using System.Text;
 using Devlooped.OpenAI;
+using Devlooped.OpenAI.Sponsors;
+using Microsoft.Extensions.DependencyInjection;
 using Spectre.Console.Cli;
 
 // Some users reported not getting emoji on Windows, so we force UTF-8 encoding.
@@ -23,7 +25,7 @@ if (args.Contains("--debug"))
 }
 #endif
 
-var app = App.Create();
+var app = App.Create(out var registrar);
 
 #if DEBUG
 app.Configure(c => c.PropagateExceptions());
@@ -53,7 +55,9 @@ result = await app.RunWithUpdatesAsync(args);
 #endif
 
 // --quiet does not report sponsor tier on every run.
-app.Run(["sponsor", "check", "--quiet"]);
+((IServiceProvider)registrar).GetRequiredService<CheckCommand>().Execute(
+    new CommandContext(["--quiet"], RemainingArguments.Empty, "check", null),
+    new CheckCommand.CheckSettings { Quiet = true });
 
 return result;
 
@@ -78,4 +82,15 @@ static IEnumerable<string> ExpandResponseFiles(IEnumerable<string> args)
             yield return arg;
         }
     }
+}
+
+class RemainingArguments : IRemainingArguments
+{
+    public static IRemainingArguments Empty { get; } = new RemainingArguments();
+
+    RemainingArguments() { }
+
+    public ILookup<string, string?> Parsed => Enumerable.Empty<string>().ToLookup(x => x, x => default(string));
+
+    public IReadOnlyList<string> Raw => [];
 }

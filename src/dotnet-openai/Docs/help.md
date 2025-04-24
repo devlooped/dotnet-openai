@@ -20,4 +20,3 @@ COMMANDS:
     vector      
     model       
     sponsor     
-```

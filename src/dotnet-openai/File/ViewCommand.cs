@@ -9,7 +9,7 @@ namespace Devlooped.OpenAI.File;
 
 [Description("View a file by its ID.")]
 [Service]
-class ViewCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<ViewCommand.ViewSettings>
+public class ViewCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<ViewCommand.ViewSettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, ViewSettings settings)
     {

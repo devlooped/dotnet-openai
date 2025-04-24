@@ -9,11 +9,11 @@ namespace Devlooped.OpenAI.Vectors;
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 [Description("Remove file from vector store")]
 [Service]
-class FileRemoveCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<FileCommandSettings>
+public class FileRemoveCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<FileCommandSettings>
 {
     public override int Execute(CommandContext context, FileCommandSettings settings)
     {
-        var response = oai.GetVectorStoreClient().RemoveFileFromStore(settings.StoreId, settings.FileId, cts.Token);
+        var response = oai.GetVectorStoreClient().RemoveFileFromStore(settings.Store, settings.FileId, cts.Token);
 
         return console.RenderJson(response.GetRawResponse(), settings, cts.Token);
     }

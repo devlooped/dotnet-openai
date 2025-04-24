@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using Humanizer;
 using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
 using Spectre.Console;
@@ -8,41 +7,21 @@ using Spectre.Console.Cli;
 namespace Devlooped.OpenAI.Vectors;
 
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-[Description("View a store by its ID.")]
+[Description("View a store by its ID or name.")]
 [Service]
-class ViewCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<ViewCommand.ViewSettings>
+public class ViewCommand(OpenAIClient oai, IAnsiConsole console, VectorIdMapper mapper, CancellationTokenSource cts) : Command<StoreCommandSettings>
 {
-    public override int Execute(CommandContext context, ViewSettings settings)
+    public override int Execute(CommandContext context, StoreCommandSettings settings)
     {
-        var response = oai.GetVectorStoreClient().GetVectorStore(settings.ID, cts.Token);
+        var response = oai.GetVectorStoreClient().GetVectorStore(settings.Store, cts.Token);
+
+        if (!response.GetRawResponse().IsError)
+            mapper.SetId(response.Value.Name, response.Value.Id);
 
         if (settings.Json)
             return console.RenderJson(response.GetRawResponse(), settings, cts.Token);
 
-        var table = new Table()
-            .Border(TableBorder.Rounded)
-            .AddColumn("[lime]ID[/]")
-            .AddColumn("[lime]Name[/]")
-            .AddColumn("[lime]Files[/]", x => x.RightAligned())
-            .AddColumn("[lime]Size[/]", x => x.RightAligned())
-            .AddColumn("[lime]Last Active[/]");
-
-        table.AddRow(
-            response.Value.Id,
-            response.Value.Name,
-            response.Value.FileCounts.Total.ToString(),
-            response.Value.UsageBytes.Bytes().Humanize(),
-            response.Value.LastActiveAt?.ToString("yyyy-MM-dd T HH:mm") ?? ""
-        );
-
-        console.Write(table);
+        console.Write(response.Value.AsTable());
         return 0;
-    }
-
-    public class ViewSettings : JsonCommandSettings
-    {
-        [Description("The ID of the vector store")]
-        [CommandArgument(0, "<ID>")]
-        public required string ID { get; init; }
     }
 }

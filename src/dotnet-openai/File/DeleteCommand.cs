@@ -8,7 +8,7 @@ namespace Devlooped.OpenAI.File;
 
 [Description("Delete a file by its ID.")]
 [Service]
-class DeleteCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<DeleteCommand.DeleteSettings>
+public class DeleteCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<DeleteCommand.DeleteSettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, DeleteSettings settings)
     {

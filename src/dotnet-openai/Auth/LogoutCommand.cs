@@ -8,7 +8,7 @@ namespace Devlooped.OpenAI.Auth;
 
 [Description("Log out of api.openai.com")]
 [Service]
-class LogoutCommand(ICredentialStore store, IAnsiConsole console) : Command
+public class LogoutCommand(ICredentialStore store, IAnsiConsole console) : Command
 {
     public override int Execute(CommandContext context)
     {

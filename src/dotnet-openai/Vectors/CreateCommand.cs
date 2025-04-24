@@ -10,7 +10,7 @@ namespace Devlooped.OpenAI.Vectors;
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 [Description("Creates a vector store")]
 [Service]
-class CreateCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<CreateCommand.CreateSettings>
+public class CreateCommand(OpenAIClient oai, VectorIdMapper mapper, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<CreateCommand.CreateSettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, CreateSettings settings)
     {
@@ -40,6 +40,9 @@ class CreateCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
             return result;
         });
 
+        if (settings.Name.IsSet)
+            mapper.SetId(settings.Name.Value, store.VectorStoreId);
+
         var json = store.GetRawResponse().Content.ToString();
         if (store.Value is null)
         {
@@ -67,7 +70,7 @@ class CreateCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
 
         [Description("File IDs to add to the vector store")]
         [CommandOption("-f|--file")]
-        public List<string> Files { get; set; } = new();
+        public string[] Files { get; set; } = [];
 
         [Description("Metadata to add to the vector store as KEY=VALUE")]
         [CommandOption("-m|--meta")]

@@ -4,15 +4,15 @@ DESCRIPTION:
 Performs semantic search against a vector store
 
 USAGE:
-    openai vector search <ID> <QUERY> [OPTIONS]
+    openai vector search <STORE> <QUERY> [OPTIONS]
 
 EXAMPLES:
     openai vector search mystore "what's the return policy on headphones?" 
 --score 0.7
 
 ARGUMENTS:
-    <ID>       The ID of the vector store
-    <QUERY>    The query to search for   
+    <STORE>    The ID or name of the vector store
+    <QUERY>    The query to search for           
 
 OPTIONS:
                              DEFAULT                                            

@@ -10,7 +10,7 @@ namespace Devlooped.OpenAI.File;
 
 [Description("Upload a local file, specifying its purpose.")]
 [Service]
-class UploadCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<UploadCommand.UploadSettings>
+public class UploadCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<UploadCommand.UploadSettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, UploadSettings settings)
     {
