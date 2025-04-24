@@ -33,7 +33,6 @@ COMMANDS:
     vector      
     model       
     sponsor     
-```
 
 <!-- src/dotnet-openai/Docs/help.md -->
 
@@ -212,13 +211,13 @@ OPTIONS:
     -h, --help    Prints help information
 
 COMMANDS:
-    create                 Creates a vector store                         
-    modify <ID>            Modify a vector store                          
-    delete <ID>            Delete a vector store by ID                    
-    list                   List vector stores                             
-    view                   View a store by its ID                         
-    search <ID> <QUERY>    Performs semantic search against a vector store
-    file                   Vector store files operations                  
+    create                    Creates a vector store                         
+    modify <STORE>            Modify a vector store                          
+    delete <STORE>            Delete a vector store by ID or name            
+    list                      List vector stores                             
+    view <STORE>              View a store by its ID or name                 
+    search <STORE> <QUERY>    Performs semantic search against a vector store
+    file                      Vector store files operations                  
 ```
 
 <!-- src/dotnet-openai/Docs/vector.md -->
@@ -230,15 +229,15 @@ DESCRIPTION:
 Performs semantic search against a vector store
 
 USAGE:
-    openai vector search <ID> <QUERY> [OPTIONS]
+    openai vector search <STORE> <QUERY> [OPTIONS]
 
 EXAMPLES:
     openai vector search mystore "what's the return policy on headphones?" 
 --score 0.7
 
 ARGUMENTS:
-    <ID>       The ID of the vector store
-    <QUERY>    The query to search for   
+    <STORE>    The ID or name of the vector store
+    <QUERY>    The query to search for           
 
 OPTIONS:
                              DEFAULT                                            
@@ -267,10 +266,10 @@ OPTIONS:
     -h, --help    Prints help information
 
 COMMANDS:
-    add <STORE_ID> <FILE_ID>       Add file to vector store               
-    delete <STORE_ID> <FILE_ID>    Remove file from vector store          
-    list <STORE_ID>                List files associated with vector store
-    view <STORE_ID> <FILE_ID>      View file association to a vector store
+    add <STORE> <FILE_ID>       Add file to vector store               
+    delete <STORE> <FILE_ID>    Remove file from vector store          
+    list <STORE>                List files associated with vector store
+    view <STORE> <FILE_ID>      View file association to a vector store
 ```
 
 <!-- src/dotnet-openai/Docs/vector-file.md -->
@@ -282,11 +281,11 @@ DESCRIPTION:
 Add file to vector store
 
 USAGE:
-    openai vector file add <STORE_ID> <FILE_ID> [OPTIONS]
+    openai vector file add <STORE> <FILE_ID> [OPTIONS]
 
 ARGUMENTS:
-    <STORE_ID>    The ID of the vector store        
-    <FILE_ID>     File ID to add to the vector store
+    <STORE>      The ID or name of the vector store
+    <FILE_ID>    File ID to add to the vector store
 
 OPTIONS:
     -h, --help               Prints help information                          
@@ -305,10 +304,10 @@ DESCRIPTION:
 List files associated with vector store
 
 USAGE:
-    openai vector file list <STORE_ID> [OPTIONS]
+    openai vector file list <STORE> [OPTIONS]
 
 ARGUMENTS:
-    <STORE_ID>    The ID of the vector store
+    <STORE>    The ID or name of the vector store
 
 OPTIONS:
                                 DEFAULT                                         
