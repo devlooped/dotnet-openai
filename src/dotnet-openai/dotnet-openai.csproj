@@ -14,6 +14,8 @@
     <BuildRef>$(GITHUB_REF_NAME)</BuildRef>
     <NoWarn>$(NoWarn);CS0436;CS9107</NoWarn>
     <!-- CS9107: (primary ctor base() call): Parameter is captured into the state of the enclosing type and its value is also passed to the base constructor. The value might be captured by the base class as well. -->
+
+    <!-- Run app with -p:NoHelp=true to avoid the help generation which might conflict/error and prevent debugging -->
   </PropertyGroup>
 
   <ItemGroup>
@@ -98,7 +100,7 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="RenderHelp" AfterTargets="Build" Condition="'' != '' and $(DesignTimeBuild) != 'true' and '$(OS)' == 'Windows_NT'">
+  <Target Name="RenderHelp" AfterTargets="Build" Condition="$(NoHelp) != 'true' and $(DesignTimeBuild) != 'true' and '$(OS)' == 'Windows_NT'">
     <PropertyGroup>
       <Cli>$(TargetDir)$(TargetName).exe</Cli>
       <HelpCommand>"$(Cli)" --help --unattended</HelpCommand>
@@ -117,7 +119,7 @@
     <WriteLinesToFile Lines="```" Overwrite="false" Encoding="UTF-8" File="Docs/help.md" />
   </Target>
 
-  <Target Name="RenderCommandHelp" AfterTargets="Build" Inputs="@(CommandHelp)" Outputs="|%(CommandHelp.Identity)|" Condition="'' != '' and $(DesignTimeBuild) != 'true' and '$(OS)' == 'Windows_NT'">
+  <Target Name="RenderCommandHelp" AfterTargets="Build" Inputs="@(CommandHelp)" Outputs="|%(CommandHelp.Identity)|" Condition="$(NoHelp) != 'true' and $(DesignTimeBuild) != 'true' and '$(OS)' == 'Windows_NT'">
     <PropertyGroup>
       <CommandHelp>%(CommandHelp.Identity)</CommandHelp>
       <Cli>$(TargetDir)$(TargetName).exe</Cli>
