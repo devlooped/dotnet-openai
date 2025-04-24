@@ -33,6 +33,7 @@ COMMANDS:
     vector      
     model       
     sponsor     
+```
 
 <!-- src/dotnet-openai/Docs/help.md -->
 
