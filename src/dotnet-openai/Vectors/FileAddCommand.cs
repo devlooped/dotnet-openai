@@ -13,7 +13,7 @@ namespace Devlooped.OpenAI.Vectors;
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 [Description("Add file to vector store")]
 [Service]
-class FileAddCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<FileAddCommandSettings>
+public class FileAddCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<FileAddCommandSettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, FileAddCommandSettings settings)
     {
@@ -37,27 +37,36 @@ class FileAddCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSo
         }
 
         message.Request.Method = "POST";
-        message.Request.Uri = new Uri($"https://api.openai.com/v1/vector_stores/{settings.StoreId}/files");
+        message.Request.Uri = new Uri($"https://api.openai.com/v1/vector_stores/{settings.Store}/files");
         message.Request.Headers.Add("OpenAI-Beta", "assistants=v2");
         var request = JsonSerializer.Serialize(new { file_id = settings.FileId, attributes });
         message.Request.Content = BinaryContent.Create(BinaryData.FromString(request));
 
         await oai.Pipeline.SendAsync(message);
-        Debug.Assert(message.Response != null);
+
+        if (message.Response is null || message.Response.IsError)
+        {
+            console.MarkupLine($":cross_mark: Failed to add file to vector store:");
+            if (message.Response != null)
+                console.RenderJson(message.Response, settings.Monochrome, cts.Token);
+
+            return -1;
+        }
+
         var vectors = oai.GetVectorStoreClient();
 
-        var response = await vectors.GetFileAssociationAsync(settings.StoreId, settings.FileId, cts.Token);
+        var response = await vectors.GetFileAssociationAsync(settings.Store, settings.FileId, cts.Token);
         if (response.Value is null || response.GetRawResponse().IsError)
         {
             console.MarkupLine($":cross_mark: Failed to add file to vector store:");
-            console.RenderJson(response.GetRawResponse(), "", settings.Monochrome, cts.Token);
+            console.RenderJson(response.GetRawResponse(), settings.Monochrome, cts.Token);
             return -1;
         }
 
         while (response.Value.Status == global::OpenAI.VectorStores.VectorStoreFileAssociationStatus.InProgress)
         {
             await Task.Delay(200, cts.Token);
-            response = await vectors.GetFileAssociationAsync(settings.StoreId, settings.FileId, cts.Token);
+            response = await vectors.GetFileAssociationAsync(settings.Store, settings.FileId, cts.Token);
             if (response.Value is null)
             {
                 console.MarkupLine($":cross_mark: Failed to add file to vector store");
@@ -65,10 +74,20 @@ class FileAddCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSo
             }
         }
 
-        return console.RenderJson(response.GetRawResponse(), settings.JQ, settings.Monochrome, cts.Token);
+        if (message.Response is null || message.Response.IsError)
+        {
+            console.MarkupLine($":cross_mark: Failed to add file to vector store:");
+            if (message.Response != null)
+                console.RenderJson(message.Response, settings.Monochrome, cts.Token);
+
+            return -1;
+        }
+
+
+        return console.RenderJson(response.GetRawResponse(), settings, cts.Token);
     }
 
-    public class FileAddCommandSettings : FileCommandSettings
+    public class FileAddCommandSettings(VectorIdMapper mapper) : FileCommandSettings(mapper)
     {
         [Description("Attributes to add to the vector file as KEY=VALUE")]
         [CommandOption("-a|--attribute")]

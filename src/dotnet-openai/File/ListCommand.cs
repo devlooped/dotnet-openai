@@ -12,7 +12,7 @@ namespace Devlooped.OpenAI.File;
 
 [Description("List files")]
 [Service]
-class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<ListCommand.ListSettings>
+public class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<ListCommand.ListSettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, ListSettings settings)
     {

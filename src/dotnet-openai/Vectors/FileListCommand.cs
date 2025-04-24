@@ -12,7 +12,7 @@ namespace Devlooped.OpenAI.Vectors;
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 [Description("List files associated with vector store")]
 [Service]
-class FileListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<FileListCommand.Settings>
+public class FileListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<FileListCommand.Settings>
 {
     static readonly JsonSerializerOptions jsonOptions = new(JsonSerializerDefaults.Web)
     {
@@ -26,7 +26,7 @@ class FileListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenS
             Filter = settings.Filter,
         };
 
-        CollectionResult result = oai.GetVectorStoreClient().GetFileAssociations(settings.StoreId, options, cts.Token);
+        CollectionResult result = oai.GetVectorStoreClient().GetFileAssociations(settings.Store, options, cts.Token);
         if (result is null)
         {
             console.MarkupLine($":cross_mark: Failed to list vector stores");
@@ -70,15 +70,21 @@ class FileListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenS
         return 0;
     }
 
-    public class Settings : ListCommandSettings
+    public class Settings(VectorIdMapper mapper) : ListCommandSettings
     {
-        [Description("The ID of the vector store")]
-        [CommandArgument(0, "<STORE_ID>")]
-        public required string StoreId { get; init; }
+        [Description("The ID or name of the vector store")]
+        [CommandArgument(0, "<STORE>")]
+        public required string Store { get; set; }
 
         [Description("Filter by status (in_progress, completed, failed, cancelled)")]
         [DefaultValue("completed")]
         [CommandOption("-f|--filter")]
         public required string Filter { get; set; } = "completed";
+
+        public override ValidationResult Validate()
+        {
+            Store = mapper.MapName(Store);
+            return base.Validate();
+        }
     }
 }

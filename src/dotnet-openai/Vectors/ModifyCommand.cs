@@ -11,7 +11,7 @@ namespace Devlooped.OpenAI.Vectors;
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 [Description("Modify a vector store")]
 [Service]
-class ModifyCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<ModifySettings>
+public class ModifyCommand(OpenAIClient oai, IAnsiConsole console, VectorIdMapper mapper, CancellationTokenSource cts) : AsyncCommand<ModifySettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, ModifySettings settings)
     {
@@ -29,23 +29,31 @@ class ModifyCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
             options.ExpirationPolicy = new VectorStoreExpirationPolicy(VectorStoreExpirationAnchor.LastActiveAt, settings.ExpiresAfter.Value);
         }
 
-        var result = await oai.GetVectorStoreClient().ModifyVectorStoreAsync(settings.Id, options, cts.Token);
-        if (result.Value is null)
+        var response = await oai.GetVectorStoreClient().ModifyVectorStoreAsync(settings.Store, options, cts.Token);
+        if (response.Value is null)
         {
             console.MarkupLine($":cross_mark: Failed to modify vector store");
             return -1;
         }
 
-        // TODO: add non-JSON output?
-        return console.RenderJson(result.GetRawResponse(), settings, cts.Token);
+        while (response.Value.Status != VectorStoreStatus.Completed)
+        {
+            await Task.Delay(200, cts.Token);
+            await oai.GetVectorStoreClient().ModifyVectorStoreAsync(settings.Store, options, cts.Token);
+        }
+
+        if (settings.Name.IsSet)
+            mapper.SetId(response.Value.Name, response.Value.Id);
+
+        if (settings.Json)
+            return console.RenderJson(response.GetRawResponse(), settings, cts.Token);
+
+        console.Write(response.Value.AsTable());
+        return 0;
     }
 
-    public class ModifySettings : JsonCommandSettings
+    public class ModifySettings(VectorIdMapper mapper) : StoreCommandSettings(mapper)
     {
-        [Description("The ID of the vector store")]
-        [CommandArgument(0, "<ID>")]
-        public required string Id { get; init; }
-
         [Description("The name of the vector store")]
         [CommandOption("-n|--name [NAME]")]
         public FlagValue<string> Name { get; set; } = new();

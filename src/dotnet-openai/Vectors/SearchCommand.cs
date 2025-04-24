@@ -13,13 +13,13 @@ namespace Devlooped.OpenAI.Vectors;
 
 [Description("Performs semantic search against a vector store")]
 [Service]
-class SearchCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<SearchSettings>
+public class SearchCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<SearchSettings>
 {
     public override async Task<int> ExecuteAsync(CommandContext context, SearchSettings settings)
     {
         var message = oai.Pipeline.CreateMessage();
         message.Request.Method = "POST";
-        message.Request.Uri = new Uri($"https://api.openai.com/v1/vector_stores/{settings.Id}/search");
+        message.Request.Uri = new Uri($"https://api.openai.com/v1/vector_stores/{settings.Store}/search");
 
         var content = new Dictionary<string, object>
         {
@@ -46,6 +46,11 @@ class SearchCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
             return console.RenderJson(node, settings, cts.Token);
 
         console.MarkupLine($"[lime]Query:[/] [grey]{node!["search_query"]![0]!.ToString()}[/]");
+        if (data.Count == 0)
+        {
+            console.MarkupLine("[red]No results found.[/]");
+            return -2;
+        }
 
         var table = new Table().Border(TableBorder.Rounded)
                                .AddColumn("[lime]File[/]")
@@ -91,16 +96,11 @@ class SearchCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
             });
 
         console.Write(table);
-
         return 0;
     }
 
-    public class SearchSettings : JsonCommandSettings
+    public class SearchSettings(VectorIdMapper mapper) : StoreCommandSettings(mapper)
     {
-        [Description("The ID of the vector store")]
-        [CommandArgument(0, "<ID>")]
-        public required string Id { get; init; }
-
         [Description("The query to search for")]
         [CommandArgument(1, "<QUERY>")]
         public required string Query { get; init; }
@@ -112,11 +112,11 @@ class SearchCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
         [Description("Automatically rewrite your queries for optimal performance")]
         [DefaultValue(true)]
         [CommandOption("-r|--rewrite")]
-        public required bool Rewrite { get; init; } = true;
+        public bool Rewrite { get; init; } = true;
 
         [Description("The minimum score to include in results")]
         [DefaultValue(0.5)]
         [CommandOption("-s|--score <SCORE>")]
-        public required double Score { get; set; } = 0.5;
+        public double Score { get; set; } = 0.5;
     }
 }

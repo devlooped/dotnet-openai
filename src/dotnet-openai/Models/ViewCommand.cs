@@ -8,7 +8,7 @@ namespace Devlooped.OpenAI.Models;
 
 [Description("View model details")]
 [Service]
-class ViewCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<ViewCommand.Settings>
+public class ViewCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<ViewCommand.Settings>
 {
     public override int Execute(CommandContext context, Settings settings)
     {

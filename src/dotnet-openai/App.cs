@@ -25,17 +25,19 @@ public static class App
 
     public static CommandApp Create() => Create(out _);
 
-    public static CommandApp Create([NotNull] out IServiceProvider services)
-        => Create(new ServiceCollection(), out services);
+    public static CommandApp Create([NotNull] out ITypeRegistrar registrar)
+        => Create(new ServiceCollection(), out registrar);
 
-    public static CommandApp Create(IAnsiConsole console, [NotNull] out IServiceProvider services)
+    public static CommandApp Create(IAnsiConsole console) => Create(console, out _);
+
+    public static CommandApp Create(IAnsiConsole console, [NotNull] out ITypeRegistrar registrar)
     {
-        var app = Create(new ServiceCollection().AddSingleton(console), out services);
+        var app = Create(new ServiceCollection().AddSingleton(console), out registrar);
         app.Configure(config => config.ConfigureConsole(console));
         return app;
     }
 
-    static CommandApp Create(IServiceCollection collection, [NotNull] out IServiceProvider services)
+    static CommandApp Create(IServiceCollection collection, [NotNull] out ITypeRegistrar registrar)
     {
         var config = new ConfigurationBuilder()
             .AddEnvironmentVariables()
@@ -65,9 +67,8 @@ public static class App
         collection.ConfigureSponsors();
         collection.AddServices();
 
-        var registrar = new TypeRegistrar(collection);
+        registrar = new TypeRegistrar(collection);
         var app = new CommandApp(registrar);
-        registrar.Services.AddSingleton<ICommandApp>(app);
 
         app.Configure(config =>
         {
@@ -81,8 +82,6 @@ public static class App
         app.UseVectors();
         app.UseModels();
         app.UseSponsors();
-
-        services = registrar.Services.BuildServiceProvider();
 
         return app;
     }

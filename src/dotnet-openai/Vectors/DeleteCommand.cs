@@ -7,21 +7,23 @@ using Spectre.Console.Cli;
 namespace Devlooped.OpenAI.Vectors;
 
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
-[Description("Delete a vector store by ID.")]
+[Description("Delete a vector store by ID or name.")]
 [Service]
-class DeleteCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<DeleteCommand.DeleteSettings>
+public class DeleteCommand(OpenAIClient oai, IAnsiConsole console, VectorIdMapper mapper, CancellationTokenSource cts) : Command<StoreCommandSettings>
 {
-    public override int Execute(CommandContext context, DeleteSettings settings)
+    public override int Execute(CommandContext context, StoreCommandSettings settings)
     {
-        var response = oai.GetVectorStoreClient().DeleteVectorStore(settings.ID, cts.Token);
+        var response = oai.GetVectorStoreClient().DeleteVectorStore(settings.Store, cts.Token);
         var json = response.GetRawResponse();
 
         if (response.GetRawResponse().IsError)
         {
             console.MarkupLine($":cross_mark: Failed to delete vector store:");
-            console.RenderJson(json, "", settings.Monochrome, cts.Token);
+            console.RenderJson(json, settings.Monochrome, cts.Token);
             return -1;
         }
+
+        mapper.RemoveId(response.Value.VectorStoreId);
 
         if (settings.Json)
         {
@@ -32,12 +34,5 @@ class DeleteCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSou
             console.WriteLine(response.Value.Deleted.ToString().ToLowerInvariant());
             return 0;
         }
-    }
-
-    public class DeleteSettings : JsonCommandSettings
-    {
-        [Description("The ID of the vector store")]
-        [CommandArgument(0, "<ID>")]
-        public required string ID { get; init; }
     }
 }

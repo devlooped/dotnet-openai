@@ -9,7 +9,7 @@ namespace Devlooped.OpenAI.Sponsors;
 
 [Description("Checks the current sponsorship status with [lime]devlooped[/], entirely offline")]
 [Service]
-class CheckCommand(IAnsiConsole console) : Command<CheckSettings>
+public class CheckCommand(IAnsiConsole console) : Command<CheckSettings>
 {
     public class CheckSettings : CommandSettings
     {
