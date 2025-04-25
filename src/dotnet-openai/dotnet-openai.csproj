@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -36,11 +36,11 @@
     <PackageReference Include="OpenAI" Version="2.2.0-beta.4" />
     <PackageReference Include="Spectre.Console.Cli" Version="0.50.0" />
     <PackageReference Include="Spectre.Console.Json" Version="0.50.0" />
-    <PackageReference Include="ThisAssembly.AssemblyInfo" Version="2.0.12" PrivateAssets="all" />
-    <PackageReference Include="ThisAssembly.Git" Version="2.0.12" PrivateAssets="all" />
-    <PackageReference Include="ThisAssembly.Metadata" Version="2.0.12" PrivateAssets="all" />
-    <PackageReference Include="ThisAssembly.Project" Version="2.0.12" PrivateAssets="all" />
-    <PackageReference Include="ThisAssembly.Strings" Version="2.0.12" PrivateAssets="all" />
+    <PackageReference Include="ThisAssembly.AssemblyInfo" Version="2.0.13" PrivateAssets="all" />
+    <PackageReference Include="ThisAssembly.Git" Version="2.0.13" PrivateAssets="all" />
+    <PackageReference Include="ThisAssembly.Metadata" Version="2.0.13" PrivateAssets="all" />
+    <PackageReference Include="ThisAssembly.Project" Version="2.0.13" PrivateAssets="all" />
+    <PackageReference Include="ThisAssembly.Strings" Version="2.0.13" PrivateAssets="all" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Scripting" Version="4.13.0" />
   </ItemGroup>
 
