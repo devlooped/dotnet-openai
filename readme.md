@@ -207,6 +207,9 @@ EXAMPLES:
     openai vector create --name myfiles --file asdf123 --file qwer456
     openai vector search mystore "what's the return policy on headphones?" 
 --score 0.7
+    openai vector search mystore "physical stores?" --filter region=us
+    openai vector search mystore "most popular stores?" -f region=us -f 
+popularity>=80
 
 OPTIONS:
     -h, --help    Prints help information
@@ -235,6 +238,9 @@ USAGE:
 EXAMPLES:
     openai vector search mystore "what's the return policy on headphones?" 
 --score 0.7
+    openai vector search mystore "physical stores?" --filter region=us
+    openai vector search mystore "most popular stores?" -f region=us -f 
+popularity>=80
 
 ARGUMENTS:
     <STORE>    The ID or name of the vector store
@@ -247,6 +253,8 @@ OPTIONS:
         --json                          Output as JSON. Implied when using --jq 
         --monochrome                    Disable colors when rendering JSON to   
                                         the console                             
+    -f, --filter                        Vector file attributes to filter as KEY[
+                                        =|!=|>|>=|<|<=]VALUE                    
     -r, --rewrite            True       Automatically rewrite your queries for  
                                         optimal performance                     
     -s, --score <SCORE>      0.5        The minimum score to include in results 
@@ -262,6 +270,10 @@ Vector store files operations
 
 USAGE:
     openai vector file [OPTIONS] <COMMAND>
+
+EXAMPLES:
+    openai file add mystore store.md -a region=us
+    openai file add mystore nypop.md -a region=us -a popularity=90
 
 OPTIONS:
     -h, --help    Prints help information
@@ -283,6 +295,10 @@ Add file to vector store
 
 USAGE:
     openai vector file add <STORE> <FILE_ID> [OPTIONS]
+
+EXAMPLES:
+    openai file add mystore store.md -a region=us
+    openai file add mystore nypop.md -a region=us -a popularity=90
 
 ARGUMENTS:
     <STORE>      The ID or name of the vector store
