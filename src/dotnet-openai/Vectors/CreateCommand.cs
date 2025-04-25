@@ -12,6 +12,11 @@ namespace Devlooped.OpenAI.Vectors;
 [Service]
 public class CreateCommand(OpenAIClient oai, VectorIdMapper mapper, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<CreateCommand.CreateSettings>
 {
+    /// <summary>
+    /// Created store ID.
+    /// </summary>
+    public string? StoreId { get; set; }
+
     public override async Task<int> ExecuteAsync(CommandContext context, CreateSettings settings)
     {
         var options = new VectorStoreCreationOptions();
@@ -33,7 +38,6 @@ public class CreateCommand(OpenAIClient oai, VectorIdMapper mapper, IAnsiConsole
             options.FileIds.Add(id);
         }
 
-
         var store = await console.Status().StartAsync("Creating vector store", async ctx =>
         {
             var result = await oai.GetVectorStoreClient().CreateVectorStoreAsync(settings.WaitForCompletion, options, cts.Token);
@@ -50,6 +54,8 @@ public class CreateCommand(OpenAIClient oai, VectorIdMapper mapper, IAnsiConsole
             console.RenderJson(json, "", settings.Monochrome, cts.Token);
             return -1;
         }
+
+        StoreId = store.Value.Id;
 
         if (settings.Json)
             return console.RenderJson(json, settings, cts.Token);

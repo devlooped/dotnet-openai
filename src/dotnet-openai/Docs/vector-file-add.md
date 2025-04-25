@@ -6,6 +6,10 @@ Add file to vector store
 USAGE:
     openai vector file add <STORE> <FILE_ID> [OPTIONS]
 
+EXAMPLES:
+    openai file add mystore store.md -a region=us
+    openai file add mystore nypop.md -a region=us -a popularity=90
+
 ARGUMENTS:
     <STORE>      The ID or name of the vector store
     <FILE_ID>    File ID to add to the vector store

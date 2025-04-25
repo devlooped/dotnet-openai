@@ -32,7 +32,9 @@ public static class App
 
     public static CommandApp Create(IAnsiConsole console, [NotNull] out ITypeRegistrar registrar)
     {
+#pragma warning disable DDI001
         var app = Create(new ServiceCollection().AddSingleton(console), out registrar);
+#pragma warning restore DDI001
         app.Configure(config => config.ConfigureConsole(console));
         return app;
     }

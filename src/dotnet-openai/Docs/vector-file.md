@@ -6,6 +6,10 @@ Vector store files operations
 USAGE:
     openai vector file [OPTIONS] <COMMAND>
 
+EXAMPLES:
+    openai file add mystore store.md -a region=us
+    openai file add mystore nypop.md -a region=us -a popularity=90
+
 OPTIONS:
     -h, --help    Prints help information
 
