@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
 using Spectre.Console;
@@ -13,8 +14,27 @@ namespace Devlooped.OpenAI.Vectors;
 
 [Description("Performs semantic search against a vector store")]
 [Service]
-public class SearchCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<SearchSettings>
+public partial class SearchCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<SearchSettings>
 {
+    static readonly JsonSerializerOptions options = new(JsonSerializerDefaults.Web)
+    {
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping,
+        WriteIndented = true
+    };
+
+    record Filter(string Type, string Key, object Value);
+
+    readonly Dictionary<string, string> operators = new()
+    {
+        ["=="] = "eq",
+        ["="] = "eq",
+        ["!="] = "ne",
+        [">"] = "gt",
+        [">="] = "gte",
+        ["<"] = "lt",
+        ["<="] = "lte"
+    };
+
     public override async Task<int> ExecuteAsync(CommandContext context, SearchSettings settings)
     {
         var message = oai.Pipeline.CreateMessage();
@@ -29,13 +49,53 @@ public class SearchCommand(OpenAIClient oai, IAnsiConsole console, CancellationT
         if (settings.Rewrite)
             content["rewrite_query"] = settings.Rewrite;
 
-        message.Request.Content = BinaryContent.Create(BinaryData.FromString(JsonSerializer.Serialize(content)));
+        if (settings.Filters.Length > 0)
+        {
+            var filters = new List<Filter>();
+            foreach (var item in settings.Filters)
+            {
+                var match = FilterExpression().Match(item);
+                if (match.Success)
+                {
+                    var key = match.Groups["key"].Value;
+                    var op = match.Groups["operator"].Value;
+                    var value = match.Groups["value"].Value;
+
+                    // Map the operator to its string equivalent
+                    if (operators.TryGetValue(op, out var operatorType))
+                    {
+                        // Parse value to appropriate type
+                        object parsedValue;
+                        if (double.TryParse(value, out var number))
+                            parsedValue = number;
+                        else if (bool.TryParse(value, out var boolean))
+                            parsedValue = boolean;
+                        else
+                            parsedValue = value;
+
+                        filters.Add(new(operatorType, key, parsedValue));
+                    }
+                }
+            }
+            content["filters"] = new
+            {
+                type = "and",
+                filters
+            };
+        }
+
+        message.Request.Content = BinaryContent.Create(BinaryData.FromString(JsonSerializer.Serialize(content, options)));
 
         await oai.Pipeline.SendAsync(message);
         Debug.Assert(message.Response != null);
 
         var node = JsonNode.Parse(message.Response.Content.ToString());
-        var data = node!["data"]!.AsArray();
+        if (node!["data"] is not JsonArray data)
+        {
+            console.RenderJson(message.Response, settings.Monochrome, cts.Token);
+            return -1;
+        }
+
         foreach (var result in data.ToList())
         {
             if (result!["score"]!.GetValue<double>() < settings.Score)
@@ -105,9 +165,9 @@ public class SearchCommand(OpenAIClient oai, IAnsiConsole console, CancellationT
         [CommandArgument(1, "<QUERY>")]
         public required string Query { get; init; }
 
-        //[Description("Vector file attributes to filter  as KEY=VALUE")]
-        //[CommandOption("-a|--attribute")]
-        //public string[] Attributes { get; set; } = [];
+        [Description("Vector file attributes to filter as KEY[[=|!=|>|>=|<|<=]]VALUE")]
+        [CommandOption("-f|--filter")]
+        public string[] Filters { get; set; } = [];
 
         [Description("Automatically rewrite your queries for optimal performance")]
         [DefaultValue(true)]
@@ -119,4 +179,15 @@ public class SearchCommand(OpenAIClient oai, IAnsiConsole console, CancellationT
         [CommandOption("-s|--score <SCORE>")]
         public double Score { get; set; } = 0.5;
     }
+
+    [GeneratedRegex("""
+        ^\s*
+        (?<key>[^\s=!<>]+)              # Match the key (anything not whitespace or operator chars)
+        \s*
+        (?<operator>==|=|!=|>=|<=|>|<)  # Match any of the operators
+        \s*
+        (?<value>.+?)                   # Match the value (non-greedy)
+        \s*$
+        """, RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace)]
+    private static partial Regex FilterExpression();
 }

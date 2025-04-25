@@ -3,6 +3,7 @@ using Spectre.Console.Cli;
 
 namespace Devlooped.OpenAI;
 
+#pragma warning disable DDI001
 public sealed class TypeRegistrar(IServiceCollection? builder = default) : ITypeRegistrar, IServiceProvider
 {
     readonly IServiceCollection builder = builder ?? new ServiceCollection();

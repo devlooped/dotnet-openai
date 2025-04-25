@@ -12,6 +12,11 @@ namespace Devlooped.OpenAI.File;
 [Service]
 public class UploadCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<UploadCommand.UploadSettings>
 {
+    /// <summary>
+    /// Uploaded file ID.
+    /// </summary>
+    public string? FileId { get; set; }
+
     public override async Task<int> ExecuteAsync(CommandContext context, UploadSettings settings)
     {
         using var file = System.IO.File.OpenRead(settings.File);
@@ -19,6 +24,8 @@ public class UploadCommand(OpenAIClient oai, IAnsiConsole console, CancellationT
         var response = await oai.GetOpenAIFileClient().UploadFileAsync(
             file, Path.GetFileName(settings.File),
             new FileUploadPurpose(settings.Purpose));
+
+        FileId = response.Value.Id;
 
         if (settings.Json)
         {

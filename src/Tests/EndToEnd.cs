@@ -71,16 +71,18 @@ public class EndToEnd : IDisposable
     {
         Assert.Equal(0, await services.GetRequiredService<Auth.StatusCommand>().ExecuteAsync());
 
-        Assert.Equal(0, await services.GetRequiredService<File.UploadCommand>().ExecuteAsync(new File.UploadCommand.UploadSettings()
+        var upload = services.GetRequiredService<File.UploadCommand>();
+        Assert.Equal(0, await upload.ExecuteAsync(new File.UploadCommand.UploadSettings()
         {
             File = Path.GetFullPath("./Content.txt"),
             Purpose = "assistants"
         }));
 
-        fileId = console.Output.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries)[^1]?.Trim();
+        fileId = upload.FileId;
         Assert.NotNull(fileId);
 
-        Assert.Equal(0, await services.GetRequiredService<Vectors.CreateCommand>().ExecuteAsync(new Vectors.CreateCommand.CreateSettings()
+        var create = services.GetRequiredService<Vectors.CreateCommand>();
+        Assert.Equal(0, await create.ExecuteAsync(new Vectors.CreateCommand.CreateSettings()
         {
             Name =
             {
@@ -90,7 +92,7 @@ public class EndToEnd : IDisposable
             Files = new[] { fileId },
         }));
 
-        storeId = console.Output.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries)[^1]?.Trim();
+        storeId = create.StoreId;
         Assert.NotNull(storeId);
 
         // Ensure mapping is persisted to config
@@ -121,8 +123,10 @@ public class EndToEnd : IDisposable
 
         Assert.False(mapper.TryGetId("foo", out id));
 
+        var search = services.GetRequiredService<Vectors.SearchCommand>();
+
         // Perform a search
-        Assert.Equal(0, await services.GetRequiredService<Vectors.SearchCommand>().ExecuteAsync(new SearchCommand.SearchSettings(mapper)
+        Assert.Equal(0, await search.ExecuteAsync(new SearchCommand.SearchSettings(mapper)
         {
             Store = "bar",
             Query = "where does kzu live?",
@@ -131,19 +135,32 @@ public class EndToEnd : IDisposable
         Assert.Contains("Argentina", console.Output);
         Assert.DoesNotContain("Analia", console.Output);
 
-        Assert.Equal(0, await services.GetRequiredService<File.UploadCommand>().ExecuteAsync(new File.UploadCommand.UploadSettings()
+        Assert.Equal(0, await upload.ExecuteAsync(new File.UploadCommand.UploadSettings()
         {
             File = Path.GetFullPath("./Content2.txt"),
-            Purpose = "assistants"
+            Purpose = "assistants",
         }));
 
-        fileId = console.Output.Split(["\r\n", "\n"], StringSplitOptions.RemoveEmptyEntries)[^1]?.Trim();
-        Assert.NotNull(fileId);
+        Assert.NotNull(upload.FileId);
 
         Assert.Equal(0, await services.GetRequiredService<Vectors.FileAddCommand>().ExecuteAsync(new Vectors.FileAddCommand.FileAddCommandSettings(mapper)
         {
             Store = "bar",
-            FileId = fileId,
+            FileId = upload.FileId,
+            Attributes = ["truthness=100"]
+        }));
+
+        Assert.Equal(0, await upload.ExecuteAsync(new File.UploadCommand.UploadSettings()
+        {
+            File = Path.GetFullPath("./Content3.txt"),
+            Purpose = "assistants",
+        }));
+
+        Assert.Equal(0, await services.GetRequiredService<Vectors.FileAddCommand>().ExecuteAsync(new Vectors.FileAddCommand.FileAddCommandSettings(mapper)
+        {
+            Store = "bar",
+            FileId = upload.FileId,
+            Attributes = ["truthness=20"]
         }));
 
         // Perform a search
@@ -151,8 +168,19 @@ public class EndToEnd : IDisposable
         {
             Store = "bar",
             Query = "who's kzu's wife?",
+            Filters = ["truthness>=80"]
         }));
 
         Assert.Contains("Analia", console.Output);
+        Assert.DoesNotContain("Grok", console.Output);
+
+        Assert.Equal(0, await services.GetRequiredService<Vectors.SearchCommand>().ExecuteAsync(new SearchCommand.SearchSettings(mapper)
+        {
+            Store = "bar",
+            Query = "who's kzu's wife?",
+            Filters = ["truthness<50"]
+        }));
+
+        Assert.Contains("Grok", console.Output);
     }
 }
