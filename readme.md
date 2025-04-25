@@ -226,6 +226,9 @@ COMMANDS:
 
 <!-- src/dotnet-openai/Docs/vector.md -->
 
+Supports [semantic search](https://platform.openai.com/docs/guides/retrieval#semantic-search) 
+including [attribute filtering](https://platform.openai.com/docs/guides/retrieval#attribute-filtering):
+
 <!-- include src/dotnet-openai/Docs/vector-search.md -->
 ```shell
 > openai vector search --help
