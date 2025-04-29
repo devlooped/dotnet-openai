@@ -12,16 +12,14 @@ static class VectorsAppExtensions
             config.AddBranch("vector", group =>
             {
                 group.AddCommand<CreateCommand>("create")
-                    .WithExample("vector create --name mystore --meta 'key1=value1' --meta 'key2=value'")
-                    .WithExample("vector create --name myfiles --file asdf123 --file qwer456");
+                    .WithExample("vector create --name mystore --meta 'key1=value1' --meta 'key2=value' --file asdf123 --file qwer456");
 
                 group.AddCommand<ModifyCommand>("modify");
                 group.AddCommand<DeleteCommand>("delete");
                 group.AddCommand<ListCommand>("list");
                 group.AddCommand<ViewCommand>("view");
                 group.AddCommand<SearchCommand>("search")
-                    .WithExample("vector search mystore \"what's the return policy on headphones?\" --score 0.7")
-                    .WithExample("vector search mystore \"physical stores?\" --filter region=us")
+                    .WithExample("vector search mystore \"what's the return policy on headphones?\" --score 0.7 --filter region=us")
                     .WithExample("vector search mystore \"most popular stores?\" -f region=us -f popularity>=80");
 
                 group.AddBranch("file", file =>
