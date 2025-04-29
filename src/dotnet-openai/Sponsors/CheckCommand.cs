@@ -37,6 +37,9 @@ public class CheckCommand(IAnsiConsole console) : Command<CheckSettings>
             return MarkupLine(ThisAssembly.Strings.Unknown.Message(project, link));
 
         var manifest = SponsorLink.GetManifest("devlooped", ThisAssembly.Metadata.Funding.GitHub.devlooped, true);
+        if (manifest.Status == ManifestStatus.Valid)
+            return 0;
+
         if (manifest.Status == ManifestStatus.Unknown || manifest.Status == ManifestStatus.Invalid)
             return MarkupLine(ThisAssembly.Strings.Unknown.Message(project, link));
 
