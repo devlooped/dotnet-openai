@@ -1,7 +1,7 @@
 ﻿```shell
 > openai sponsor sync --help
 DESCRIPTION:
-Synchronizes the sponsorship manifest for devlooped
+Synchronizes your sponsorship manifest for devlooped
 
 USAGE:
     openai sponsor sync [OPTIONS]
