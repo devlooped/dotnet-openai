@@ -17,13 +17,11 @@ args = [.. ExpandResponseFiles(args)];
 if (args.Contains("-?"))
     args = [.. args.Select(x => x == "-?" ? "-h" : x)];
 
-#if DEBUG
 if (args.Contains("--debug"))
 {
     Debugger.Launch();
     args = [.. args.Where(x => x != "--debug")];
 }
-#endif
 
 var app = App.Create(out var registrar);
 
