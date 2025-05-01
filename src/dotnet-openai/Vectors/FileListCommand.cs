@@ -65,7 +65,8 @@ public class FileListCommand(OpenAIClient oai, IAnsiConsole console, Cancellatio
                 }
             });
 
-        console.Write(table);
+        if (table.Rows.Count > 0)
+            console.Write(table);
 
         return 0;
     }
