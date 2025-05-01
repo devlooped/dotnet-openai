@@ -71,7 +71,8 @@ public class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTok
                 }
             });
 
-        console.Write(table);
+        if (table.Rows.Count > 0)
+            console.Write(table);
 
         return 0;
     }
