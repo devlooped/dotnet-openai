@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -51,6 +51,7 @@
     <ProjectProperty Include="PackageId" />
     <ProjectProperty Include="PackageVersion" />
     <ProjectProperty Include="SLEET_FEED_URL" />
+    <Constant Include="ServiceUri" Value="https://api.openai.com/" />
   </ItemGroup>
 
   <ItemGroup>

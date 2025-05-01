@@ -7,6 +7,8 @@ OPTIONS:
     -h, --help    Prints help information
 
 COMMANDS:
+    list               Lists projects that have been authenticated and can be   
+                       used with the login command                              
     login <project>    Authenticate to OpenAI.                                  
                                                                                 
                        Supports API key autentication using the Git Credential  

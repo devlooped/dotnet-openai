@@ -15,7 +15,7 @@ public class StatusCommand(IAnsiConsole console, IConfiguration configuration, I
 {
     public override async Task<int> ExecuteAsync(CommandContext context, StatusSettings settings)
     {
-        var apikey = store.Get("https://api.openai.com", "_CURRENT_")?.Password
+        var apikey = store.Get(ThisAssembly.Constants.ServiceUri, "_CURRENT_")?.Password
             ?? configuration["OPENAI_API_KEY"]
             ?? "";
 
@@ -30,7 +30,18 @@ public class StatusCommand(IAnsiConsole console, IConfiguration configuration, I
         {
             await client.GetOpenAIModelClient().GetModelsAsync();
 
-            console.MarkupLine($"  :check_mark_button: Logged in to api.openai.com");
+            console.Markup($"  :check_mark_button: Logged in to api.openai.com");
+            if (store.GetAccounts(ThisAssembly.Constants.ServiceUri)
+                .Where(x => store.Get(ThisAssembly.Constants.ServiceUri, x)?.Password == apikey)
+                .FirstOrDefault() is { } project)
+            {
+                console.MarkupLine($" ([bold]{project}[/])");
+            }
+            else
+            {
+                console.MarkupLine(" ([grey]OPENAI_API_KEY[/])");
+            }
+
             if (settings.ShowToken)
                 console.MarkupLine($"  :check_mark_button: Token: {apikey}");
 

@@ -13,7 +13,7 @@ public class TokenCommand(IConfiguration configuration, ICredentialStore store, 
 {
     public override int Execute(CommandContext context)
     {
-        var apikey = store.Get("https://api.openai.com", "_CURRENT_")?.Password
+        var apikey = store.Get(ThisAssembly.Constants.ServiceUri, "_CURRENT_")?.Password
             ?? configuration["OPENAI_API_KEY"]
             ?? "";
 

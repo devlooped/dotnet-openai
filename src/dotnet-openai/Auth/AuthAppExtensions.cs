@@ -12,6 +12,7 @@ static class AuthAppExtensions
         {
             config.AddBranch("auth", group =>
             {
+                group.AddCommand<ListCommand>("list");
                 group.AddCommand<LoginCommand>("login");
                 group.AddCommand<LogoutCommand>("logout");
                 group.AddCommand<StatusCommand>("status");

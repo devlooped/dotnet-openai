@@ -24,7 +24,7 @@ public class LoginCommand(IAnsiConsole console, ICredentialStore store) : Comman
 {
     public override int Execute(CommandContext context, LoginSettings settings)
     {
-        var token = store.Get("https://api.openai.com", settings.Project)?.Password;
+        var token = store.Get(ThisAssembly.Constants.ServiceUri, settings.Project)?.Password;
 
         if (settings.WithToken)
         {
@@ -43,9 +43,9 @@ public class LoginCommand(IAnsiConsole console, ICredentialStore store) : Comman
             return -2;
         }
 
-        store.AddOrUpdate("https://api.openai.com", settings.Project, token);
+        store.AddOrUpdate(ThisAssembly.Constants.ServiceUri, settings.Project, token);
         // Last login sets the current one.
-        store.AddOrUpdate("https://api.openai.com", "_CURRENT_", token);
+        store.AddOrUpdate(ThisAssembly.Constants.ServiceUri, "_CURRENT_", token);
 
         return 0;
     }
