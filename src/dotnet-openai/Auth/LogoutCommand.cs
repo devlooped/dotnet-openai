@@ -12,9 +12,9 @@ public class LogoutCommand(ICredentialStore store, IAnsiConsole console) : Comma
 {
     public override int Execute(CommandContext context)
     {
-        foreach (var account in store.GetAccounts("https://api.openai.com"))
+        foreach (var account in store.GetAccounts(ThisAssembly.Constants.ServiceUri))
         {
-            store.Remove("https://api.openai.com", account);
+            store.Remove(ThisAssembly.Constants.ServiceUri, account);
             if (account != "_CURRENT_")
                 console.MarkupLine($"  :check_mark:  Logged out {account}");
         }

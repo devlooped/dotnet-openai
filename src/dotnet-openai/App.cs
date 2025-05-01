@@ -59,7 +59,7 @@ public static class App
             var configuration = services.GetRequiredService<IConfiguration>();
             var store = services.GetRequiredService<ICredentialStore>();
 
-            var apikey = store.Get("https://api.openai.com", "_CURRENT_")?.Password
+            var apikey = store.Get(ThisAssembly.Constants.ServiceUri, "_CURRENT_")?.Password
                 ?? configuration["OPENAI_API_KEY"]
                 ?? "";
 
