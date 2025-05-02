@@ -53,7 +53,7 @@ result = await app.RunWithUpdatesAsync(args);
 #endif
 
 // --quiet does not report sponsor tier on every run.
-((IServiceProvider)registrar).GetRequiredService<CheckCommand>().Execute(
+await ((IServiceProvider)registrar).GetRequiredService<CheckCommand>().ExecuteAsync(
     new CommandContext(["--quiet"], RemainingArguments.Empty, "check", null),
     new CheckCommand.CheckSettings { Quiet = true });
 
