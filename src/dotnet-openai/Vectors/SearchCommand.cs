@@ -44,6 +44,7 @@ public partial class SearchCommand(OpenAIClient oai, IAnsiConsole console, Cance
         var content = new Dictionary<string, object>
         {
             ["query"] = settings.Query,
+            ["ranking_options"] = new { score_threshold = settings.Score }
         };
 
         if (settings.Rewrite)
@@ -94,12 +95,6 @@ public partial class SearchCommand(OpenAIClient oai, IAnsiConsole console, Cance
         {
             console.RenderJson(message.Response, settings.Monochrome, cts.Token);
             return -1;
-        }
-
-        foreach (var result in data.ToList())
-        {
-            if (result!["score"]!.GetValue<double>() < settings.Score)
-                data.Remove(result);
         }
 
         if (settings.Json)
