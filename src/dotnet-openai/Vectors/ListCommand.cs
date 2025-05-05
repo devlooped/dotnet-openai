@@ -45,9 +45,10 @@ public class ListCommand(OpenAIClient oai, IAnsiConsole console, VectorIdMapper 
                 foreach (var node in nodes["data"]!.AsArray().AsEnumerable().Where(x => x != null))
                 {
                     var id = node!["id"]!.ToString();
-                    var name = node["name"]!.ToString();
+                    var name = node["name"]?.ToString() ?? "";
 
-                    mapper.SetId(name, id);
+                    if (!string.IsNullOrEmpty(name))
+                        mapper.SetId(name, id);
 
                     table.AddRow(
                         id,
