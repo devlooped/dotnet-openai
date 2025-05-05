@@ -23,6 +23,10 @@ public class VectorIdMapper(OpenAIClient oai)
         if (existing != null && existing != name)
             section = section.Unset(existing, ConfigLevel.Global);
 
+        // Never try to set an empty id. It should equal to "unset"
+        if (string.IsNullOrEmpty(name))
+            return;
+
         if (!section.TryGetString(name, out var saved) || saved != id)
             section = section.SetString(name, id, ConfigLevel.Global);
     }
