@@ -3,7 +3,9 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
+using NuGet.Protocol.Plugins;
 using OpenAI;
+using Scriban.Runtime.Accessors;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using static Devlooped.OpenAI.Vectors.FileAddCommand;
@@ -13,12 +15,10 @@ namespace Devlooped.OpenAI.Vectors;
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 [Description("Add file to vector store")]
 [Service]
-public class FileAddCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<FileAddCommandSettings>
+public class FileAddCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<FileAddSettings>
 {
-    public override async Task<int> ExecuteAsync(CommandContext context, FileAddCommandSettings settings)
+    public override Task<int> ExecuteAsync(CommandContext context, FileAddSettings settings)
     {
-        var message = oai.Pipeline.CreateMessage();
-
         var attributes = new Dictionary<string, object>();
         foreach (var item in settings.Attributes)
         {
@@ -35,6 +35,13 @@ public class FileAddCommand(OpenAIClient oai, IAnsiConsole console, Cancellation
                     attributes[key] = value;
             }
         }
+
+        return AddAsync(settings, attributes);
+    }
+
+    protected async Task<int> AddAsync(FileCommandSettings settings, Dictionary<string, object> attributes)
+    {
+        var message = oai.Pipeline.CreateMessage();
 
         message.Request.Method = "POST";
         message.Request.Uri = new Uri($"https://api.openai.com/v1/vector_stores/{settings.Store}/files");
@@ -87,7 +94,7 @@ public class FileAddCommand(OpenAIClient oai, IAnsiConsole console, Cancellation
         return console.RenderJson(response.GetRawResponse(), settings, cts.Token);
     }
 
-    public class FileAddCommandSettings(VectorIdMapper mapper) : FileCommandSettings(mapper)
+    public class FileAddSettings(VectorIdMapper mapper) : FileCommandSettings(mapper)
     {
         [Description("Attributes to add to the vector file as KEY=VALUE")]
         [CommandOption("-a|--attribute")]
