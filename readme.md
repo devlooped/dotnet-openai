@@ -286,10 +286,11 @@ OPTIONS:
     -h, --help    Prints help information
 
 COMMANDS:
-    add <STORE> <FILE_ID>       Add file to vector store               
-    delete <STORE> <FILE_ID>    Remove file from vector store          
-    list <STORE>                List files associated with vector store
-    view <STORE> <FILE_ID>      View file association to a vector store
+    add <STORE> <FILE_ID>       Add file to vector store                     
+    delete <STORE> <FILE_ID>    Remove file from vector store                
+    list <STORE>                List files associated with vector store      
+    modify <STORE> <FILE_ID>    Add or modify file attributes in vector store
+    view <STORE> <FILE_ID>      View file association to a vector store      
 ```
 
 <!-- src/dotnet-openai/Docs/vector-file.md -->
