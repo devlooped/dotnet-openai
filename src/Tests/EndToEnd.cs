@@ -5,6 +5,8 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using Azure;
+using Azure.Core.Serialization;
 using Devlooped.OpenAI.Vectors;
 using DotNetConfig;
 using GitCredentialManager;
@@ -116,6 +118,12 @@ public class EndToEnd : IDisposable
             },
         }));
 
+        // Give OpenAI some time to refresh its caches.
+        while (this.services.GetRequiredService<OpenAIClient>().GetVectorStoreClient().GetVectorStores().Any(x => x.Name == "foo"))
+        {
+            await Task.Delay(200);
+        }
+
         Assert.Equal(0, await services.GetRequiredService<Vectors.ViewCommand>().ExecuteAsync(new StoreCommandSettings(mapper)
         {
             Store = "bar",
@@ -143,7 +151,7 @@ public class EndToEnd : IDisposable
 
         Assert.NotNull(upload.FileId);
 
-        Assert.Equal(0, await services.GetRequiredService<Vectors.FileAddCommand>().ExecuteAsync(new Vectors.FileAddCommand.FileAddCommandSettings(mapper)
+        Assert.Equal(0, await services.GetRequiredService<Vectors.FileAddCommand>().ExecuteAsync(new Vectors.FileAddCommand.FileAddSettings(mapper)
         {
             Store = "bar",
             FileId = upload.FileId,
@@ -156,12 +164,26 @@ public class EndToEnd : IDisposable
             Purpose = "assistants",
         }));
 
-        Assert.Equal(0, await services.GetRequiredService<Vectors.FileAddCommand>().ExecuteAsync(new Vectors.FileAddCommand.FileAddCommandSettings(mapper)
+        Assert.Equal(0, await services.GetRequiredService<Vectors.FileAddCommand>().ExecuteAsync(new Vectors.FileAddCommand.FileAddSettings(mapper)
         {
             Store = "bar",
             FileId = upload.FileId,
             Attributes = ["truthness=20"]
         }));
+
+        Assert.Equal(0, await services.GetRequiredService<Vectors.FileModifyCommand>().ExecuteAsync(new Vectors.FileAddCommand.FileAddSettings(mapper)
+        {
+            Store = "bar",
+            FileId = upload.FileId,
+            Attributes = ["foo=bar", "bool=true"]
+        }));
+
+        // Ensure that the file is still in the vector store with the combination of old and new attributes
+        var association = await this.services.GetRequiredService<OpenAIClient>().GetVectorStoreClient().GetFileAssociationAsync(storeId, upload.FileId);
+        Assert.Equal(3, association.Value.Attributes.Count);
+        Assert.Equal(20, association.Value.Attributes["truthness"].ToObjectFromJson<double>());
+        Assert.Equal("bar", association.Value.Attributes["foo"].ToObjectFromJson<string>());
+        Assert.True(association.Value.Attributes["bool"].ToObjectFromJson<bool>());
 
         // Perform a search
         Assert.Equal(0, await services.GetRequiredService<Vectors.SearchCommand>().ExecuteAsync(new SearchCommand.SearchSettings(mapper)

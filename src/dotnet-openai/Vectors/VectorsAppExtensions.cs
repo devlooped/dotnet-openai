@@ -30,6 +30,7 @@ static class VectorsAppExtensions
                         .WithExample("file add mystore nypop.md -a region=us -a popularity=90");
                     file.AddCommand<FileRemoveCommand>("delete");
                     file.AddCommand<FileListCommand>("list");
+                    file.AddCommand<FileModifyCommand>("modify");
                     file.AddCommand<FileViewCommand>("view");
                 });
             });

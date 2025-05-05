@@ -12,14 +12,14 @@ namespace Devlooped.OpenAI.Vectors;
 #pragma warning disable OPENAI001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 [Description("List files associated with vector store")]
 [Service]
-public class FileListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<FileListCommand.Settings>
+public class FileListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<FileListCommand.FileListSettings>
 {
     static readonly JsonSerializerOptions jsonOptions = new(JsonSerializerDefaults.Web)
     {
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
     };
 
-    public override int Execute(CommandContext context, Settings settings)
+    public override int Execute(CommandContext context, FileListSettings settings)
     {
         var options = new VectorStoreFileAssociationCollectionOptions
         {
@@ -71,7 +71,7 @@ public class FileListCommand(OpenAIClient oai, IAnsiConsole console, Cancellatio
         return 0;
     }
 
-    public class Settings(VectorIdMapper mapper) : ListCommandSettings
+    public class FileListSettings(VectorIdMapper mapper) : ListCommandSettings
     {
         [Description("The ID or name of the vector store")]
         [CommandArgument(0, "<STORE>")]
