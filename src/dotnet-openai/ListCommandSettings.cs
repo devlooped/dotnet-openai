@@ -73,6 +73,17 @@ public class ListCommandSettings : JsonCommandSettings
 
             nodes.AddRange(((JsonArray)data).AsEnumerable());
             first = false;
+
+            // See if we can apply the filter here without further loading.
+            if (!Range.IsSet &&
+                (!Skip.IsSet || Skip.Value <= nodes.Count) &&
+                Take.IsSet && (Take.Value + Skip.Value <= nodes.Count))
+            {
+                // We can apply the filter here without further loading.
+                nodes = [.. nodes.Skip(Skip.Value).Take(Take.Value)];
+                result["data"] = new JsonArray([.. nodes.Where(x => x != null).Select(x => x!.DeepClone())]);
+                return result;
+            }
         }
 
         nodes = ApplyFilters(nodes);

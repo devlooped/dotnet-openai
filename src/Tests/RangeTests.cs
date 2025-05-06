@@ -49,6 +49,14 @@ public class RangeTests
         var ex = await Assert.ThrowsAsync<CompilationErrorException>(async () => await ApplyRangeAsync(list, rangeString));
     }
 
+    [Fact]
+    public async Task CanEvaluateRange()
+    {
+        var range = await CSharpScript.EvaluateAsync<Range>("..^5");
+
+        Assert.NotNull(range);
+    }
+
     public static async Task<List<T>> ApplyRangeAsync<T>(List<T> collection, string rangeString)
     {
         var script = CSharpScript.Create<List<T>>(
