@@ -8,6 +8,8 @@
 
 <!-- #content -->
 
+An OpenAI CLI for managing files, vectors and more
+
 ## Usage
 
 <!-- include src/dotnet-openai/Docs/help.md -->

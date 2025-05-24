@@ -5,7 +5,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
     <PackageId>dotnet-openai</PackageId>
-    <Description>An OpenAI CLI</Description>
+    <Description>An OpenAI CLI for managing files, vector stores and more</Description>
     <ToolCommandName>openai</ToolCommandName>
     <PackageTags>openai dotnet-tool</PackageTags>
     <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
