@@ -16,7 +16,7 @@ public class FileModifyCommand(OpenAIClient oai, IAnsiConsole console, Cancellat
         // We can't really modify the existing file association, so we remove and re-add it, 
         // preserving any existing attributes.
         var vectors = oai.GetVectorStoreClient();
-        var response = await vectors.GetFileAssociationAsync(settings.Store, settings.FileId, cts.Token);
+        var response = await vectors.GetVectorStoreFileAsync(settings.Store, settings.FileId, cts.Token);
         var attributes = new Dictionary<string, object>();
 
         foreach (var existing in response.Value.Attributes)
@@ -47,7 +47,7 @@ public class FileModifyCommand(OpenAIClient oai, IAnsiConsole console, Cancellat
             }
         }
 
-        await vectors.RemoveFileFromStoreAsync(settings.Store, settings.FileId, cts.Token);
+        await vectors.RemoveFileFromVectorStoreAsync(settings.Store, settings.FileId, cts.Token);
         return await AddAsync(settings, attributes);
     }
 }

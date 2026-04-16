@@ -62,7 +62,7 @@ public class FileAddCommand(OpenAIClient oai, IAnsiConsole console, Cancellation
 
         var vectors = oai.GetVectorStoreClient();
 
-        var response = await vectors.GetFileAssociationAsync(settings.Store, settings.FileId, cts.Token);
+        var response = await vectors.GetVectorStoreFileAsync(settings.Store, settings.FileId, cts.Token);
         if (response.Value is null || response.GetRawResponse().IsError)
         {
             console.MarkupLine($":cross_mark: Failed to add file to vector store:");
@@ -70,10 +70,10 @@ public class FileAddCommand(OpenAIClient oai, IAnsiConsole console, Cancellation
             return -1;
         }
 
-        while (response.Value.Status == global::OpenAI.VectorStores.VectorStoreFileAssociationStatus.InProgress)
+        while (response.Value.Status == global::OpenAI.VectorStores.VectorStoreFileStatus.InProgress)
         {
             await Task.Delay(200, cts.Token);
-            response = await vectors.GetFileAssociationAsync(settings.Store, settings.FileId, cts.Token);
+            response = await vectors.GetVectorStoreFileAsync(settings.Store, settings.FileId, cts.Token);
             if (response.Value is null)
             {
                 console.MarkupLine($":cross_mark: Failed to add file to vector store");

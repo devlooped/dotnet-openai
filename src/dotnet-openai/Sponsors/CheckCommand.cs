@@ -19,6 +19,9 @@ public class CheckCommand(Config config, Lazy<DevloopedSyncCommand> sync, IAnsiC
         public bool Quiet { get; set; }
     }
 
+    public Task<int> RunAsync(CommandContext context, CheckSettings settings, CancellationToken cancellationToken)
+        => ExecuteAsync(context, settings, cancellationToken);
+
     protected override async Task<int> ExecuteAsync(CommandContext context, CheckSettings settings, CancellationToken cancellationToken)
     {
         // Don't render anything if not interactive, so we don't disrupt usage in CI for example.

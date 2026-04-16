@@ -10,7 +10,7 @@ namespace Devlooped.OpenAI.Models;
 [Service]
 public class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<ListCommandSettings>
 {
-    public override int Execute(CommandContext context, ListCommandSettings settings, CancellationToken cancellationToken)
+    protected override int Execute(CommandContext context, ListCommandSettings settings, CancellationToken cancellationToken)
     {
         var result = oai.GetOpenAIModelClient().GetModels(cts.Token);
         if (result is null)

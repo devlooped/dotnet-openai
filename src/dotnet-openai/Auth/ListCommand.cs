@@ -11,7 +11,7 @@ namespace Devlooped.OpenAI.Auth;
 [Service]
 public class ListCommand(IAnsiConsole console, IConfiguration configuration, ICredentialStore store, CancellationTokenSource cts) : Command<ListCommand.ListSettings>
 {
-    public override int Execute(CommandContext context, ListSettings settings, CancellationToken cancellationToken)
+    protected override int Execute(CommandContext context, ListSettings settings, CancellationToken cancellationToken)
     {
         var currentKey = store.Get(ThisAssembly.Constants.ServiceUri, "_CURRENT_")?.Password
             ?? configuration["OPENAI_API_KEY"]

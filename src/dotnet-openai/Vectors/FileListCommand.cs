@@ -19,14 +19,14 @@ public class FileListCommand(OpenAIClient oai, IAnsiConsole console, Cancellatio
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
     };
 
-    public override int Execute(CommandContext context, FileListSettings settings, CancellationToken cancellationToken)
+    protected override int Execute(CommandContext context, FileListSettings settings, CancellationToken cancellationToken)
     {
-        var options = new VectorStoreFileAssociationCollectionOptions
+        var options = new VectorStoreFileCollectionOptions
         {
             Filter = settings.Filter,
         };
 
-        CollectionResult result = oai.GetVectorStoreClient().GetFileAssociations(settings.Store, options, cts.Token);
+        CollectionResult result = oai.GetVectorStoreClient().GetVectorStoreFiles(settings.Store, options, cts.Token);
         if (result is null)
         {
             console.MarkupLine($":cross_mark: Failed to list vector stores");

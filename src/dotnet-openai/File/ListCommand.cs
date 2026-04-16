@@ -8,6 +8,8 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using ClosedAI = OpenAI;
 
+#pragma warning disable OPENAI001
+
 namespace Devlooped.OpenAI.File;
 
 [Description("List files")]

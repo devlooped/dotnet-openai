@@ -10,7 +10,7 @@ namespace Devlooped.OpenAI.Auth;
 [Service]
 public class LogoutCommand(ICredentialStore store, IAnsiConsole console) : Command
 {
-    public override int Execute(CommandContext context, CancellationToken cancellationToken)
+    protected override int Execute(CommandContext context, CancellationToken cancellationToken)
     {
         foreach (var account in store.GetAccounts(ThisAssembly.Constants.ServiceUri))
         {
