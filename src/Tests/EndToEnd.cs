@@ -14,7 +14,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenAI;
 using Spectre.Console;
-using Spectre.Console.Advanced;
 using Spectre.Console.Cli;
 using Spectre.Console.Rendering;
 using Spectre.Console.Testing;
@@ -179,7 +178,7 @@ public class EndToEnd : IDisposable
         }));
 
         // Ensure that the file is still in the vector store with the combination of old and new attributes
-        var association = await this.services.GetRequiredService<OpenAIClient>().GetVectorStoreClient().GetFileAssociationAsync(storeId, upload.FileId);
+        var association = await this.services.GetRequiredService<OpenAIClient>().GetVectorStoreClient().GetVectorStoreFileAsync(storeId, upload.FileId);
         Assert.Equal(3, association.Value.Attributes.Count);
         Assert.Equal(20, association.Value.Attributes["truthness"].ToObjectFromJson<double>());
         Assert.Equal("bar", association.Value.Attributes["foo"].ToObjectFromJson<string>());

@@ -17,7 +17,7 @@ public static class ICommandExtensions
         if (settings.Validate() is { Successful: false } validation)
             throw new Exception(validation.Message);
 
-        return command.Execute(EmptyContext, settings);
+        return command.ExecuteAsync(EmptyContext, settings, CancellationToken.None);
     }
 
     public static Task<int> ExecuteAsync<TSettings>(this ICommand<TSettings> command, Action<TSettings>? configure = default)
@@ -28,7 +28,7 @@ public static class ICommandExtensions
         if (settings.Validate() is { Successful: false } validation)
             throw new Exception(validation.Message);
 
-        return command.Execute(EmptyContext, settings);
+        return command.ExecuteAsync(EmptyContext, settings, CancellationToken.None);
     }
 
     class RemainingArguments : IRemainingArguments

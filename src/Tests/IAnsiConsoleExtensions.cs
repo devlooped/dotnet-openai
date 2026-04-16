@@ -21,5 +21,6 @@ public static class IAnsiConsoleExtensions
         public RenderPipeline Pipeline => console.Pipeline;
         public void Clear(bool home) => console.Clear(home);
         public void Write(IRenderable renderable) => console.Write(renderable);
+        public void WriteAnsi(Action<AnsiWriter> action) => console.WriteAnsi(action);
     }
 }
