@@ -88,13 +88,14 @@
   </ItemGroup>
 
   <Target Name="DownloadDevloopedJwk" BeforeTargets="GetAssemblyAttributes" Inputs="$(MSBuildProjectFullPath)" Outputs="$(MSBuildProjectDirectory)\$(BaseIntermediateOutputPath)devlooped.jwk">
-    <Exec Command="curl --silent --output $(MSBuildProjectDirectory)\$(BaseIntermediateOutputPath)devlooped.jwk https://sponsorlink.devlooped.com/jwk" />
+    <Exec Command="curl --silent --output $(MSBuildProjectDirectory)\$(BaseIntermediateOutputPath)devlooped.jwk https://sponsorlink.devlooped.com/jwk" IgnoreExitCode="true" />
   </Target>
 
   <Target Name="ReadDevloopedJwk" DependsOnTargets="DownloadDevloopedJwk" BeforeTargets="GetAssemblyAttributes">
     <PropertyGroup>
-      <!-- Read public key we validate manifests against -->
-      <DevloopedJwk>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\$(BaseIntermediateOutputPath)devlooped.jwk'))</DevloopedJwk>
+      <!-- Read public key we validate manifests against, or use empty string if download failed -->
+      <DevloopedJwk Condition="Exists('$(MSBuildProjectDirectory)\$(BaseIntermediateOutputPath)devlooped.jwk')">$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\$(BaseIntermediateOutputPath)devlooped.jwk'))</DevloopedJwk>
+      <DevloopedJwk Condition="'$(DevloopedJwk)' == ''"></DevloopedJwk>
     </PropertyGroup>
     <ItemGroup>
       <AssemblyMetadata Include="Funding.GitHub.devlooped" Value="$(DevloopedJwk)" />
