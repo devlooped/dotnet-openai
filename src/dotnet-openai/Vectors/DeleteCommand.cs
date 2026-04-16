@@ -12,7 +12,7 @@ namespace Devlooped.OpenAI.Vectors;
 [Service]
 public class DeleteCommand(OpenAIClient oai, IAnsiConsole console, VectorIdMapper mapper, CancellationTokenSource cts) : AsyncCommand<DeleteSettings>
 {
-    public override async Task<int> ExecuteAsync(CommandContext context, DeleteSettings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, DeleteSettings settings, CancellationToken cancellationToken)
     {
         // Whether we need to delete all files too.
         if (settings.Files)

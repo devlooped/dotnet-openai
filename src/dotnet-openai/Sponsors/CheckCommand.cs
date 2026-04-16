@@ -19,7 +19,7 @@ public class CheckCommand(Config config, Lazy<DevloopedSyncCommand> sync, IAnsiC
         public bool Quiet { get; set; }
     }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, CheckSettings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, CheckSettings settings, CancellationToken cancellationToken)
     {
         // Don't render anything if not interactive, so we don't disrupt usage in CI for example.
         // In GH actions, console input/output is redirected, for example, and output is redirected 
@@ -45,7 +45,7 @@ public class CheckCommand(Config config, Lazy<DevloopedSyncCommand> sync, IAnsiC
         // If not valid and we can auto-sync, do it now.
         if (config.GetBoolean("sponsorlink", "autosync") == true)
         {
-            await sync.Value.ExecuteAsync(context, new() { Unattended = settings.Quiet });
+            await sync.Value.ExecuteAsync(context, new() { Unattended = settings.Quiet }, cancellationToken);
             manifest = SponsorLink.GetManifest("devlooped", ThisAssembly.Metadata.Funding.GitHub.devlooped, true);
             if (manifest.Status == ManifestStatus.Valid)
                 return 0;

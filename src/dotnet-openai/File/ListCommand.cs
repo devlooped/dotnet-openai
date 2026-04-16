@@ -14,7 +14,7 @@ namespace Devlooped.OpenAI.File;
 [Service]
 public class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<ListCommand.ListSettings>
 {
-    public override async Task<int> ExecuteAsync(CommandContext context, ListSettings settings)
+    public override async Task<int> ExecuteAsync(CommandContext context, ListSettings settings, CancellationToken cancellationToken)
     {
         ClientResult<OpenAIFileCollection> result;
 

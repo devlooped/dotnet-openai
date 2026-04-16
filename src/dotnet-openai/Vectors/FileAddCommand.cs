@@ -17,7 +17,7 @@ namespace Devlooped.OpenAI.Vectors;
 [Service]
 public class FileAddCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<FileAddSettings>
 {
-    public override Task<int> ExecuteAsync(CommandContext context, FileAddSettings settings)
+    public override Task<int> ExecuteAsync(CommandContext context, FileAddSettings settings, CancellationToken cancellationToken)
     {
         var attributes = new Dictionary<string, object>();
         foreach (var item in settings.Attributes)
