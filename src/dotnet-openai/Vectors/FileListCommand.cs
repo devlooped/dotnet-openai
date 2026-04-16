@@ -19,7 +19,7 @@ public class FileListCommand(OpenAIClient oai, IAnsiConsole console, Cancellatio
         PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
     };
 
-    public override int Execute(CommandContext context, FileListSettings settings)
+    public override int Execute(CommandContext context, FileListSettings settings, CancellationToken cancellationToken)
     {
         var options = new VectorStoreFileAssociationCollectionOptions
         {

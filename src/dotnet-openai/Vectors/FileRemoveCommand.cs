@@ -11,7 +11,7 @@ namespace Devlooped.OpenAI.Vectors;
 [Service]
 public class FileRemoveCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : Command<FileCommandSettings>
 {
-    public override int Execute(CommandContext context, FileCommandSettings settings)
+    public override int Execute(CommandContext context, FileCommandSettings settings, CancellationToken cancellationToken)
     {
         var response = oai.GetVectorStoreClient().RemoveFileFromStore(settings.Store, settings.FileId, cts.Token);
 

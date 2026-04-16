@@ -13,7 +13,7 @@ class DevloopedViewCommand(Config config, IHttpClientFactory http) : ViewCommand
         public string[]? Sponsorable { get; set; } = ["devlooped"];
     }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, DevloopedViewSettings settings, CancellationToken cancellationToken)
+    protected override async Task<int> ExecuteAsync(CommandContext context, DevloopedViewSettings settings, CancellationToken cancellationToken)
     {
         if (context.ShouldRunWelcome(config, settings))
         {

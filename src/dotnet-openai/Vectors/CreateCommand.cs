@@ -17,7 +17,7 @@ public class CreateCommand(OpenAIClient oai, VectorIdMapper mapper, IAnsiConsole
     /// </summary>
     public string? StoreId { get; set; }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, CreateSettings settings, CancellationToken cancellationToken)
+    protected override async Task<int> ExecuteAsync(CommandContext context, CreateSettings settings, CancellationToken cancellationToken)
     {
         var options = new VectorStoreCreationOptions();
         if (settings.Name.IsSet)

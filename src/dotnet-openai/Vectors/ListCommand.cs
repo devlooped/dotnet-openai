@@ -13,7 +13,7 @@ namespace Devlooped.OpenAI.Vectors;
 [Service]
 public class ListCommand(OpenAIClient oai, IAnsiConsole console, VectorIdMapper mapper, CancellationTokenSource cts) : Command<ListCommandSettings>
 {
-    public override int Execute(CommandContext context, ListCommandSettings settings)
+    public override int Execute(CommandContext context, ListCommandSettings settings, CancellationToken cancellationToken)
     {
         CollectionResult result = oai.GetVectorStoreClient().GetVectorStores();
         if (result is null)

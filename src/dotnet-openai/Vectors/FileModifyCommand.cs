@@ -11,7 +11,7 @@ namespace Devlooped.OpenAI.Vectors;
 [Service]
 public class FileModifyCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : FileAddCommand(oai, console, cts)
 {
-    public override async Task<int> ExecuteAsync(CommandContext context, FileAddSettings settings, CancellationToken cancellationToken)
+    protected override async Task<int> ExecuteAsync(CommandContext context, FileAddSettings settings, CancellationToken cancellationToken)
     {
         // We can't really modify the existing file association, so we remove and re-add it, 
         // preserving any existing attributes.

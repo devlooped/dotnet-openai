@@ -19,7 +19,7 @@ public class CheckCommand(Config config, Lazy<DevloopedSyncCommand> sync, IAnsiC
         public bool Quiet { get; set; }
     }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, CheckSettings settings, CancellationToken cancellationToken)
+    protected override async Task<int> ExecuteAsync(CommandContext context, CheckSettings settings, CancellationToken cancellationToken)
     {
         // Don't render anything if not interactive, so we don't disrupt usage in CI for example.
         // In GH actions, console input/output is redirected, for example, and output is redirected 

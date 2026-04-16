@@ -22,7 +22,7 @@ namespace Devlooped.OpenAI.Auth;
 [Service]
 public class LoginCommand(IAnsiConsole console, ICredentialStore store) : Command<LoginCommand.LoginSettings>
 {
-    public override int Execute(CommandContext context, LoginSettings settings)
+    public override int Execute(CommandContext context, LoginSettings settings, CancellationToken cancellationToken)
     {
         var token = store.Get(ThisAssembly.Constants.ServiceUri, settings.Project)?.Password;
 

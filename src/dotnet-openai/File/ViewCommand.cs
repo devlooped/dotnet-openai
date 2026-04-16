@@ -11,7 +11,7 @@ namespace Devlooped.OpenAI.File;
 [Service]
 public class ViewCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<ViewCommand.ViewSettings>
 {
-    public override async Task<int> ExecuteAsync(CommandContext context, ViewSettings settings, CancellationToken cancellationToken)
+    protected override async Task<int> ExecuteAsync(CommandContext context, ViewSettings settings, CancellationToken cancellationToken)
     {
         var response = await oai.GetOpenAIFileClient().GetFileAsync(settings.ID);
 

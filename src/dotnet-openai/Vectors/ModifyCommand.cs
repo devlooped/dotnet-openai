@@ -13,7 +13,7 @@ namespace Devlooped.OpenAI.Vectors;
 [Service]
 public class ModifyCommand(OpenAIClient oai, IAnsiConsole console, VectorIdMapper mapper, CancellationTokenSource cts) : AsyncCommand<ModifySettings>
 {
-    public override async Task<int> ExecuteAsync(CommandContext context, ModifySettings settings, CancellationToken cancellationToken)
+    protected override async Task<int> ExecuteAsync(CommandContext context, ModifySettings settings, CancellationToken cancellationToken)
     {
         var options = new VectorStoreModificationOptions();
         if (settings.Name.IsSet)

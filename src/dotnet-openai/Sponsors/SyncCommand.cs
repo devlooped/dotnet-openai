@@ -16,7 +16,7 @@ public class DevloopedSyncCommand(Config config, IGraphQueryClient client, IGitH
         public string[]? Sponsorable { get; set; } = ["devlooped"];
     }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, DevloopedSyncSettings settings, CancellationToken cancellationToken)
+    protected override async Task<int> ExecuteAsync(CommandContext context, DevloopedSyncSettings settings, CancellationToken cancellationToken)
     {
         if (context.ShouldRunWelcome(config, settings))
         {
