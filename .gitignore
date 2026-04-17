@@ -11,6 +11,8 @@ BenchmarkDotNet.Artifacts
 .genaiscript
 .idea
 local.settings.json
+.env
+*.local
 
 *.suo
 *.sdf
@@ -24,6 +26,7 @@ local.settings.json
 *.binlog
 *.zip
 __azurite*.*
+AzuriteConfig
 __*__
 
 .nuget
