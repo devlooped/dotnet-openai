@@ -13,7 +13,7 @@ namespace Devlooped.OpenAI.Auth;
 [Service]
 public class StatusCommand(IAnsiConsole console, IConfiguration configuration, ICredentialStore store, OpenAIClient client) : AsyncCommand<StatusCommand.StatusSettings>
 {
-    public override async Task<int> ExecuteAsync(CommandContext context, StatusSettings settings)
+    protected override async Task<int> ExecuteAsync(CommandContext context, StatusSettings settings, CancellationToken cancellationToken)
     {
         var apikey = store.Get(ThisAssembly.Constants.ServiceUri, "_CURRENT_")?.Password
             ?? configuration["OPENAI_API_KEY"]

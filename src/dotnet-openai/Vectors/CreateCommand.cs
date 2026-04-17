@@ -17,7 +17,7 @@ public class CreateCommand(OpenAIClient oai, VectorIdMapper mapper, IAnsiConsole
     /// </summary>
     public string? StoreId { get; set; }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, CreateSettings settings)
+    protected override async Task<int> ExecuteAsync(CommandContext context, CreateSettings settings, CancellationToken cancellationToken)
     {
         var options = new VectorStoreCreationOptions();
         if (settings.Name.IsSet)
@@ -40,12 +40,12 @@ public class CreateCommand(OpenAIClient oai, VectorIdMapper mapper, IAnsiConsole
 
         var store = await console.Status().StartAsync("Creating vector store", async ctx =>
         {
-            var result = await oai.GetVectorStoreClient().CreateVectorStoreAsync(settings.WaitForCompletion, options, cts.Token);
+            var result = await oai.GetVectorStoreClient().CreateVectorStoreAsync(options, cts.Token);
             return result;
         });
 
         if (settings.Name.IsSet)
-            mapper.SetId(settings.Name.Value, store.VectorStoreId);
+            mapper.SetId(settings.Name.Value, store.Value.Id);
 
         var json = store.GetRawResponse().Content.ToString();
         if (store.Value is null)

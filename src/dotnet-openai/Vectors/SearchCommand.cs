@@ -35,7 +35,7 @@ public partial class SearchCommand(OpenAIClient oai, IAnsiConsole console, Cance
         ["<="] = "lte"
     };
 
-    public override async Task<int> ExecuteAsync(CommandContext context, SearchSettings settings)
+    protected override async Task<int> ExecuteAsync(CommandContext context, SearchSettings settings, CancellationToken cancellationToken)
     {
         var message = oai.Pipeline.CreateMessage();
         message.Request.Method = "POST";

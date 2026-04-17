@@ -17,7 +17,7 @@ public class UploadCommand(OpenAIClient oai, IAnsiConsole console, CancellationT
     /// </summary>
     public string? FileId { get; set; }
 
-    public override async Task<int> ExecuteAsync(CommandContext context, UploadSettings settings)
+    protected override async Task<int> ExecuteAsync(CommandContext context, UploadSettings settings, CancellationToken cancellationToken)
     {
         using var file = System.IO.File.OpenRead(settings.File);
 

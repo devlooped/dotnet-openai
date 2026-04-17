@@ -30,7 +30,7 @@ static class SponsorsAppExtensions
         if (!tos && settings.ToS == true)
         {
             // Implicit acceptance on first run of another tool, like `sponsor sync --tos`
-            new ConfigCommand(config).Execute(context, new ConfigCommand.ConfigSettings { ToS = true, Quiet = true });
+            new ConfigCommand(config).Execute(context, new ConfigCommand.ConfigSettings { ToS = true, Quiet = true }, CancellationToken.None);
             return false;
         }
 

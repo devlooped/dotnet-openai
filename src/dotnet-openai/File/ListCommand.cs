@@ -8,13 +8,15 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using ClosedAI = OpenAI;
 
+#pragma warning disable OPENAI001
+
 namespace Devlooped.OpenAI.File;
 
 [Description("List files")]
 [Service]
 public class ListCommand(OpenAIClient oai, IAnsiConsole console, CancellationTokenSource cts) : AsyncCommand<ListCommand.ListSettings>
 {
-    public override async Task<int> ExecuteAsync(CommandContext context, ListSettings settings)
+    protected override async Task<int> ExecuteAsync(CommandContext context, ListSettings settings, CancellationToken cancellationToken)
     {
         ClientResult<OpenAIFileCollection> result;
 

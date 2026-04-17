@@ -12,14 +12,14 @@ namespace Devlooped.OpenAI.Vectors;
 [Service]
 public class DeleteCommand(OpenAIClient oai, IAnsiConsole console, VectorIdMapper mapper, CancellationTokenSource cts) : AsyncCommand<DeleteSettings>
 {
-    public override async Task<int> ExecuteAsync(CommandContext context, DeleteSettings settings)
+    protected override async Task<int> ExecuteAsync(CommandContext context, DeleteSettings settings, CancellationToken cancellationToken)
     {
         // Whether we need to delete all files too.
         if (settings.Files)
         {
             if (App.IsNonInteractive)
             {
-                await Parallel.ForEachAsync(oai.GetVectorStoreClient().GetFileAssociationsAsync(settings.Store, cancellationToken: cts.Token), cts.Token,
+                await Parallel.ForEachAsync(oai.GetVectorStoreClient().GetVectorStoreFilesAsync(settings.Store, cancellationToken: cts.Token), cts.Token,
                     async (file, token) => await oai.GetOpenAIFileClient().DeleteFileAsync(file.FileId, cancellationToken: token));
             }
             else
@@ -37,7 +37,7 @@ public class DeleteCommand(OpenAIClient oai, IAnsiConsole console, VectorIdMappe
                     {
                         var task = ctx.AddTask($"Deleting files associated with {settings.Store}");
                         task.MaxValue(oai.GetVectorStoreClient().GetVectorStore(settings.Store, cts.Token).Value.FileCounts.Total);
-                        await Parallel.ForEachAsync(oai.GetVectorStoreClient().GetFileAssociationsAsync(settings.Store, cancellationToken: cts.Token), cts.Token,
+                        await Parallel.ForEachAsync(oai.GetVectorStoreClient().GetVectorStoreFilesAsync(settings.Store, cancellationToken: cts.Token), cts.Token,
                             async (file, token) =>
                             {
                                 await oai.GetOpenAIFileClient().DeleteFileAsync(file.FileId, cancellationToken: token);

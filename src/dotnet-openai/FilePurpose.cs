@@ -3,6 +3,8 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using ClosedAI = OpenAI;
 
+#pragma warning disable OPENAI001
+
 namespace Devlooped.OpenAI;
 
 // https://platform.openai.com/docs/api-reference/files/object#files/object-purpose
