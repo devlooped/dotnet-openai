@@ -1,5 +1,4 @@
 ﻿using System.ClientModel.Primitives;
-using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -66,22 +65,20 @@ static class JsonOutput
         {
             using var doc = JsonDocument.Parse(json);
             var results = Jq.Evaluate(jq.Trim(), doc.RootElement);
-            var sb = new StringBuilder();
+            var lines = new List<string>();
             foreach (var result in results)
             {
                 if (cancellation.IsCancellationRequested)
                     return -1;
 
                 // Raw output: strings are written without JSON quoting, other values as JSON
-                if (result.ValueKind == JsonValueKind.String)
-                    sb.AppendLine(result.GetString());
-                else
-                    sb.AppendLine(result.GetRawText());
+                lines.Add(result.ValueKind == JsonValueKind.String
+                    ? result.GetString() ?? string.Empty
+                    : result.GetRawText());
             }
 
-            var output = sb.ToString().TrimEnd();
-            if (!string.IsNullOrEmpty(output))
-                WriteJson(console, monochrome, output);
+            if (lines.Count > 0)
+                WriteJson(console, monochrome, string.Join(Environment.NewLine, lines));
 
             return 0;
         }
