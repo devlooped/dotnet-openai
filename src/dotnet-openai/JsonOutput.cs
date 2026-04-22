@@ -1,9 +1,9 @@
 ﻿using System.ClientModel.Primitives;
-using System.Security.Cryptography;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Devlooped;
 using Spectre.Console;
 using Spectre.Console.Cli;
 using Spectre.Console.Json;
@@ -62,80 +62,34 @@ static class JsonOutput
 
     public static int RenderJson(this IAnsiConsole console, string json, string jq, bool monochrome = false, CancellationToken cancellation = default)
     {
-        var info = new System.Diagnostics.ProcessStartInfo(JQ.Path)
+        try
         {
-            RedirectStandardError = true,
-            RedirectStandardOutput = true,
-            RedirectStandardInput = true,
-            UseShellExecute = false,
-        };
+            using var doc = JsonDocument.Parse(json);
+            var results = Jq.Evaluate(jq.Trim(), doc.RootElement);
+            var sb = new StringBuilder();
+            foreach (var result in results)
+            {
+                if (cancellation.IsCancellationRequested)
+                    return -1;
 
-        info.StandardInputEncoding = info.StandardErrorEncoding = info.StandardOutputEncoding = Encoding.UTF8;
-        info.ArgumentList.Add("-r");
-        info.ArgumentList.Add("--monochrome-output");
+                // Raw output: strings are written without JSON quoting, other values as JSON
+                if (result.ValueKind == JsonValueKind.String)
+                    sb.AppendLine(result.GetString());
+                else
+                    sb.AppendLine(result.GetRawText());
+            }
 
-        var normalized = jq.ReplaceLineEndings().Trim();
-        if (normalized.Contains(Environment.NewLine))
-        {
-            // get sha256 of the query, make a temp file with a windows-friendly filename derived from it
-            // and persist the query. use the temp file as the query file input instead of a simple arg
-            var hash = BitConverter.ToString(SHA256.HashData(Encoding.UTF8.GetBytes(normalized)));
-            var queryFile = Path.Combine(Path.GetTempPath(), $"{hash}.jq");
-            if (!System.IO.File.Exists(queryFile))
-                System.IO.File.WriteAllText(queryFile, normalized);
+            var output = sb.ToString().TrimEnd();
+            if (!string.IsNullOrEmpty(output))
+                WriteJson(console, monochrome, output);
 
-            info.ArgumentList.Add("-f");
-            info.ArgumentList.Add(queryFile);
+            return 0;
         }
-        else
+        catch (JqException ex)
         {
-            info.ArgumentList.Add(jq.Trim());
-        }
-
-        var process = System.Diagnostics.Process.Start(info);
-        if (process == null)
-        {
-            console.MarkupLine($":cross_mark: Could not start JQ from {JQ.Path}");
+            console.MarkupLine($":cross_mark: {Markup.Escape(ex.Message)}");
             return -1;
         }
-
-        if (!process.HasExited)
-        {
-            try
-            {
-                using var writer = process.StandardInput;
-                writer.Write(json);
-                writer.Close();
-            }
-            catch (IOException ioe)
-            {
-                console.WriteException(ioe);
-                // The process might exit due to parsing of the query
-            }
-        }
-
-        while (!cancellation.IsCancellationRequested && !process.WaitForExit(100))
-        {
-        }
-
-        if (cancellation.IsCancellationRequested)
-        {
-            if (!process.HasExited)
-                process.Kill();
-
-            return -1;
-        }
-
-        var output = process.ExitCode != 0 ?
-            process.StandardError.ReadToEnd() :
-            process.StandardOutput.ReadToEnd();
-
-        if (!string.IsNullOrEmpty(output))
-        {
-            WriteJson(console, monochrome, output);
-        }
-
-        return process.ExitCode;
     }
 
     static void WriteJson(IAnsiConsole console, bool monochrome, string json)
